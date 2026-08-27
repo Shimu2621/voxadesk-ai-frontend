@@ -1,0 +1,5 @@
+import Link from "next/link";
+import { Mic, ShieldCheck } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+export default function DemoPage(){return <main className="grid min-h-screen place-items-center bg-slate-950 p-5"><Card className="w-full max-w-xl p-8 text-center"><Link href="/" className="text-xl font-black"><span className="text-cyan-400">Voxa</span>Desk AI</Link><div className="mx-auto mt-10 grid h-24 w-24 place-items-center rounded-full bg-cyan-400/10 ring-1 ring-cyan-400/30"><Mic className="text-cyan-400" size={36}/></div><h1 className="mt-7 text-3xl font-bold">Meet your AI receptionist</h1><p className="mx-auto mt-3 max-w-md text-slate-400">Ask about services, availability, or book a test appointment. A private signed ElevenLabs session will connect here.</p><Button className="mt-7">Start voice demo</Button><p className="mt-6 flex items-center justify-center gap-2 text-xs text-slate-500"><ShieldCheck size={14}/> Demo conversations are labeled and can be deleted.</p></Card></main>}
