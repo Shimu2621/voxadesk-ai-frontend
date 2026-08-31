@@ -1,9 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { voxadeskApi } from "@/lib/voxadesk-api";
+import { uiReducer } from "@/lib/ui-slice";
 
 export const makeStore = () =>
   configureStore({
-    reducer: { [voxadeskApi.reducerPath]: voxadeskApi.reducer },
+    reducer: { [voxadeskApi.reducerPath]: voxadeskApi.reducer, ui: uiReducer },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(voxadeskApi.middleware),
   });

@@ -16,4 +16,3 @@ Next.js frontend for VoxaDesk AI, an AI receptionist SaaS that answers phone/web
 4. Open `http://localhost:3000`.
 
 The backend is a separate repository expected at `http://localhost:4000` by default.
-

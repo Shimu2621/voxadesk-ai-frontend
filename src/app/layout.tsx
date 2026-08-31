@@ -5,9 +5,18 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "VoxaDesk AI — Your always-on AI receptionist",
-  description: "Answer calls, book appointments, capture leads, and hand off to your team.",
+  description:
+    "Answer calls, book appointments, capture leads, and hand off to your team.",
 };
 
-export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
-  return <html lang="en"><body><Providers>{children}</Providers></body></html>;
+export default function RootLayout({
+  children,
+}: Readonly<{ children: ReactNode }>) {
+  return (
+    <html lang="en">
+      <body>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  );
 }

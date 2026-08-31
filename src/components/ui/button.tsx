@@ -9,7 +9,8 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary: "bg-cyan-400 px-5 py-3 text-slate-950 hover:bg-cyan-300",
-        secondary: "border border-white/15 bg-white/5 px-5 py-3 text-white hover:bg-white/10",
+        secondary:
+          "border border-white/15 bg-white/5 px-5 py-3 text-white hover:bg-white/10",
         ghost: "px-3 py-2 text-slate-300 hover:bg-white/10 hover:text-white",
       },
     },
@@ -22,5 +23,10 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
 
 export function Button({ className, variant, asChild, ...props }: ButtonProps) {
   const Component = asChild ? Slot : "button";
-  return <Component className={cn(buttonVariants({ variant }), className)} {...props} />;
+  return (
+    <Component
+      className={cn(buttonVariants({ variant }), className)}
+      {...props}
+    />
+  );
 }
