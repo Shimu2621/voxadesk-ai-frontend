@@ -8,8 +8,11 @@ export default function LoginPage() {
       footer={
         <span>
           New to VoxaDesk AI?{" "}
-          <Link className="text-cyan-400" href="/signup">
-            Create an account
+          <Link
+            className="font-bold text-[#58E8C7] hover:text-[#70ECD2]"
+            href="/signup"
+          >
+            Sign up
           </Link>
         </span>
       }

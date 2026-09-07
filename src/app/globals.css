@@ -1,9 +1,60 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-cyan-200: #b8f8e9;
+  --color-cyan-300: #83efd6;
+  --color-cyan-400: var(--primary);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
 
 :root {
   color-scheme: dark;
+  --primary: oklch(0.82 0.16 170);
+  --primary-foreground: #06110f;
+  --primary-hover: #70ecd2;
+  --primary-rgb: 88, 232, 199;
+  --background: #070910;
+  --foreground: #f4f5ff;
+  --card: #10131f;
+  --card-foreground: #f4f5ff;
+  --popover: #10131f;
+  --popover-foreground: #f4f5ff;
+  --secondary: #171a29;
+  --secondary-foreground: #f4f5ff;
+  --muted: #171a29;
+  --muted-foreground: #9297b4;
+  --accent: #1b2030;
+  --accent-foreground: #f4f5ff;
+  --destructive: #ef4444;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.12);
+  --ring: var(--primary);
+  --radius: 0.8rem;
 }
 * {
   box-sizing: border-box;
@@ -12,9 +63,153 @@ body {
   margin: 0;
   background: #020617;
   color: #f8fafc;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+.auth-page {
+  background:
+    radial-gradient(
+      circle at 79% 46%,
+      rgba(80, 64, 190, 0.08),
+      transparent 28%
+    ),
+    #070910;
+}
+
+.auth-grid {
+  background-color: #0b0d19;
+  background-image:
+    linear-gradient(rgba(129, 136, 178, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(129, 136, 178, 0.07) 1px, transparent 1px),
+    radial-gradient(
+      circle at 10% 4%,
+      rgba(var(--primary-rgb), 0.06),
+      transparent 32%
+    );
+  background-size:
+    58px 58px,
+    58px 58px,
+    100% 100%;
+}
+
+.auth-glow {
+  background:
+    radial-gradient(circle at 54% 44%, rgba(62, 49, 145, 0.1), transparent 35%),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(var(--primary-rgb), 0.035),
+      transparent 35%
+    );
+}
+
+.auth-label {
+  display: block;
+  color: #9ba0bd;
+  font-size: 0.875rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+}
+
+.auth-input {
+  margin-top: 0.5rem;
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.7rem;
+  background: rgba(18, 20, 34, 0.88);
+  padding: 0.9rem 1rem;
+  color: #f4f5ff;
+  outline: none;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease;
+}
+
+.auth-input::placeholder {
+  color: #747995;
+}
+.auth-input:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+.auth-input:focus {
+  border-color: rgba(var(--primary-rgb), 0.75);
+  background: rgba(20, 23, 38, 0.98);
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+}
+
+.social-button {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.65rem;
+  background: rgba(20, 22, 37, 0.82);
+  color: #e8e9f4;
+  font-size: 0.875rem;
+  font-weight: 700;
+  opacity: 0.72;
+  cursor: not-allowed;
+}
+
+.google-g {
+  background: conic-gradient(
+    from -45deg,
+    #4285f4 0 25%,
+    #34a853 0 40%,
+    #fbbc05 0 65%,
+    #ea4335 0 85%,
+    #4285f4 0
+  );
+  background-clip: text;
+  color: transparent;
+}
+
+.auth-checkbox {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--primary);
+}
+
+.auth-submit {
+  width: 100%;
+  min-height: 54px;
+  border: 0;
+  border-radius: 0.85rem;
+  background: var(--primary);
+  color: #06110f;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 12px 34px rgba(var(--primary-rgb), 0.12);
+  transition:
+    transform 160ms ease,
+    background-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.auth-submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: var(--primary-hover);
+  box-shadow: 0 16px 38px rgba(var(--primary-rgb), 0.18);
+}
+.auth-submit:focus-visible {
+  outline: 3px solid rgba(var(--primary-rgb), 0.25);
+  outline-offset: 3px;
+}
+.auth-submit:disabled {
+  cursor: wait;
+  opacity: 0.65;
 }
 ::selection {
-  background: #22d3ee;
+  background: var(--primary);
   color: #020617;
 }

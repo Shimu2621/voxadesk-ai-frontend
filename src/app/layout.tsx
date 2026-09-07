@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "VoxaDesk AI — Your always-on AI receptionist",
   description:
     "Answer calls, book appointments, capture leads, and hand off to your team.",
+  generator: "VoxaDesk-AI",
 };
 
 export default function RootLayout({

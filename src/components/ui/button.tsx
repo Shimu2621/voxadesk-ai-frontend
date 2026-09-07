@@ -11,6 +11,8 @@ const buttonVariants = cva(
         primary: "bg-cyan-400 px-5 py-3 text-slate-950 hover:bg-cyan-300",
         secondary:
           "border border-white/15 bg-white/5 px-5 py-3 text-white hover:bg-white/10",
+        outline:
+          "border border-white/10 bg-[#141625]/80 px-5 py-3 text-white hover:border-cyan-400/30 hover:bg-white/[0.08]",
         ghost: "px-3 py-2 text-slate-300 hover:bg-white/10 hover:text-white",
       },
     },
