@@ -1,9 +1,9 @@
 "use client";
-import Link from "next/link";
 import { Mic, ShieldCheck } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { BrandLogo } from "@/components/brand-logo";
 import {
   useCreateSignedSessionMutation,
   useGetAgentsQuery,
@@ -61,9 +61,7 @@ function DemoConsole() {
   return (
     <main className="grid min-h-screen place-items-center bg-slate-950 p-5">
       <Card className="w-full max-w-xl p-8 text-center">
-        <Link href="/" className="text-xl font-black">
-          <span className="text-cyan-400">Voxa</span>Desk AI
-        </Link>
+        <BrandLogo />
         <div className="mx-auto mt-10 grid h-24 w-24 place-items-center rounded-full bg-cyan-400/10 ring-1 ring-cyan-400/30">
           <Mic className="text-cyan-400" size={36} />
         </div>

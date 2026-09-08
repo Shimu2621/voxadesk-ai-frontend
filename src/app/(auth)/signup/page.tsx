@@ -9,7 +9,7 @@ export default function SignupPage() {
         <span>
           Already have an account?{" "}
           <Link
-            className="font-bold text-[#58E8C7] hover:text-[#70ECD2]"
+            className="font-bold text-primary hover:text-cyan-300"
             href="/login"
           >
             Log in

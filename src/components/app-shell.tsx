@@ -11,6 +11,7 @@ import {
   Activity,
 } from "lucide-react";
 import type { ReactNode } from "react";
+import { BrandLogo } from "@/components/brand-logo";
 
 const navigation = [
   ["Overview", "/app", LayoutDashboard],
@@ -28,9 +29,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-slate-950 text-white md:grid md:grid-cols-[250px_1fr]">
       <aside className="border-b border-white/10 bg-slate-950/95 p-5 md:min-h-screen md:border-b-0 md:border-r">
-        <Link href="/" className="text-xl font-black tracking-tight">
-          <span className="text-cyan-400">Voxa</span>Desk AI
-        </Link>
+        <BrandLogo compact />
         <p className="mt-2 text-xs text-slate-500">AI receptionist workspace</p>
         <nav className="mt-8 grid grid-cols-2 gap-1 md:grid-cols-1">
           {navigation.map(([label, href, Icon]) => (

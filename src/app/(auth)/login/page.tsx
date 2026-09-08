@@ -9,7 +9,7 @@ export default function LoginPage() {
         <span>
           New to VoxaDesk AI?{" "}
           <Link
-            className="font-bold text-[#58E8C7] hover:text-[#70ECD2]"
+            className="font-bold text-primary hover:text-cyan-300"
             href="/signup"
           >
             Sign up

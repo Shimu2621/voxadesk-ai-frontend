@@ -49,7 +49,7 @@ export function AnimatedGridPattern({ className }: { className?: string }) {
           y={y * 58 + 1}
           width="56"
           height="56"
-          fill="rgb(88 232 199)"
+          fill="oklch(0.82 0.16 170)"
           initial={{ opacity: 0.02 }}
           animate={
             reduceMotion ? { opacity: 0.04 } : { opacity: [0.02, 0.11, 0.02] }
