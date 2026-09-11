@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { AuroraText } from "@/components/ui/aurora-text";
 import { WordRotate } from "@/components/ui/word-rotate";
 import { BrandLogo } from "@/components/brand-logo";
 import { TrustedIntegrations } from "@/components/landing/trusted-integrations";
@@ -37,13 +36,13 @@ export default function HomePage() {
             <Sparkles size={15} /> Real-time AI reception, built for action
           </div>
           <h1 className="text-5xl font-black tracking-tight sm:text-7xl">
-            Every call answered.
-            <br />
-            <span className="text-cyan-400">
-              Every
-              <AuroraText>
-                <WordRotate words={["Word", "Rotate", "opportunity"]} />
-              </AuroraText>
+            <span className="block">Every call answered.</span>
+            <span className="mt-2 block text-white">
+              Every{" "}
+              <WordRotate
+                words={["opportunity", "conversation", "appointment"]}
+                aurora
+              />{" "}
               captured.
             </span>
           </h1>
