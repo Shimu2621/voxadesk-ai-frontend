@@ -39,9 +39,9 @@ export function SiteFooter() {
   const reduceMotion = useReducedMotion();
   return (
     <footer className="relative overflow-hidden border-t border-white/[0.07] bg-[#060810] px-6 pb-8 pt-16">
-      <div className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
+      <div className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-linear-to-r from-transparent via-primary/60 to-transparent" />
       <motion.div
-        className="pointer-events-none absolute -top-32 left-1/2 size-80 -translate-x-1/2 rounded-full bg-primary/[0.05] blur-[100px]"
+        className="pointer-events-none absolute -top-32 left-1/2 size-80 -translate-x-1/2 rounded-full bg-primary/5 blur-[100px]"
         animate={
           reduceMotion
             ? undefined
@@ -118,7 +118,7 @@ export function SiteFooter() {
               target="_blank"
               rel="noreferrer"
               aria-label="VoxaDesk AI on GitHub"
-              className="grid size-8 place-items-center rounded-lg border border-white/[0.08] text-slate-500 transition hover:border-primary/25 hover:text-primary"
+              className="grid size-8 place-items-center rounded-lg border border-white/8 text-slate-500 transition hover:border-primary/25 hover:text-primary"
             >
               <Github size={15} />
             </a>
