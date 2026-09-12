@@ -14,6 +14,7 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { MagicCard } from "@/components/magicui/magic-card";
+import { SectionBadge } from "@/components/landing/section-badge";
 
 type Capability = {
   icon: LucideIcon;
@@ -127,9 +128,9 @@ export function AutomationBento() {
           viewport={{ once: true, amount: 0.45 }}
           transition={{ duration: 0.6 }}
         >
-          <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-            <Sparkles size={14} /> One agent. Every front-desk workflow.
-          </span>
+          <SectionBadge icon={Sparkles} tone="violet">
+            One agent. Every front-desk workflow.
+          </SectionBadge>
           <h2
             id="automation-heading"
             className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-white sm:text-5xl"

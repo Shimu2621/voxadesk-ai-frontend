@@ -12,7 +12,9 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { RainbowButton } from "@/components/ui/rainbow-button";
 import { Card } from "@/components/ui/card";
+import { SectionBadge } from "@/components/landing/section-badge";
 
 const scenarios = {
   appointment: {
@@ -77,9 +79,7 @@ export function InteractiveCallDemo() {
           viewport={{ once: true, amount: 0.35 }}
           transition={{ duration: 0.65, ease: "easeOut" }}
         >
-          <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
-            <PhoneCall size={14} /> Interactive preview
-          </span>
+          <SectionBadge icon={PhoneCall}>Interactive preview</SectionBadge>
           <h2
             id="demo-heading"
             className="mt-6 text-4xl font-semibold tracking-[-0.04em] text-white sm:text-5xl"
@@ -91,14 +91,14 @@ export function InteractiveCallDemo() {
             takes action while your team stays focused.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Button asChild>
+            <RainbowButton asChild>
               <Link href="/demo">
                 Try the live demo <ArrowRight size={16} />
               </Link>
-            </Button>
-            <Button asChild variant="secondary">
+            </RainbowButton>
+            <RainbowButton asChild variant="outline">
               <Link href="/signup">Build your receptionist</Link>
-            </Button>
+            </RainbowButton>
           </div>
           <div className="mt-7 flex flex-wrap gap-x-5 gap-y-2 text-xs text-slate-500">
             <span className="flex items-center gap-1.5">

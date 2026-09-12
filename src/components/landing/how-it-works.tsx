@@ -4,6 +4,7 @@ import { Cable, Rocket, WandSparkles } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
 import { MagicCard } from "@/components/magicui/magic-card";
+import { SectionBadge } from "@/components/landing/section-badge";
 
 const steps = [
   {
@@ -42,9 +43,9 @@ export function HowItWorks() {
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.6 }}
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+          <SectionBadge icon={Cable} tone="blue">
             From setup to live in three steps
-          </p>
+          </SectionBadge>
           <h2
             id="how-heading"
             className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-white sm:text-5xl"

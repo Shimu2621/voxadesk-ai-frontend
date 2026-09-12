@@ -12,8 +12,9 @@ import {
   Users,
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Button } from "@/components/ui/button";
+import { RainbowButton } from "@/components/ui/rainbow-button";
 import { MagicCard } from "@/components/magicui/magic-card";
+import { SectionBadge } from "@/components/landing/section-badge";
 
 const proofPoints = [
   {
@@ -67,9 +68,9 @@ export function OutcomeEstimator() {
           viewport={{ once: true, amount: 0.45 }}
           transition={{ duration: 0.6 }}
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+          <SectionBadge icon={Sparkles} tone="amber">
             Built for measurable outcomes
-          </p>
+          </SectionBadge>
           <h2
             id="outcomes-heading"
             className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-white sm:text-5xl"
@@ -216,11 +217,11 @@ export function OutcomeEstimator() {
               workflow.
             </p>
           </div>
-          <Button asChild>
+          <RainbowButton asChild>
             <Link href="/signup">
               Start building <ArrowRight size={15} />
             </Link>
-          </Button>
+          </RainbowButton>
         </motion.div>
       </div>
     </section>

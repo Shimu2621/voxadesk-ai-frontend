@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { MagicCard } from "@/components/magicui/magic-card";
+import { SectionBadge } from "@/components/landing/section-badge";
 
 const connections = {
   calendar: {
@@ -104,9 +105,9 @@ export function IntegrationEcosystem() {
           viewport={{ once: true, amount: 0.45 }}
           transition={{ duration: 0.6 }}
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+          <SectionBadge icon={Webhook} tone="blue">
             Connected by design
-          </p>
+          </SectionBadge>
           <h2
             id="ecosystem-heading"
             className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-white sm:text-5xl"

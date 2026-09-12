@@ -4,8 +4,9 @@ import Link from "next/link";
 import { useState } from "react";
 import { Check, ChevronDown, Sparkles } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Button } from "@/components/ui/button";
+import { RainbowButton } from "@/components/ui/rainbow-button";
 import { MagicCard } from "@/components/magicui/magic-card";
+import { SectionBadge } from "@/components/landing/section-badge";
 
 const plans = [
   {
@@ -87,9 +88,9 @@ export function PricingFaq() {
           viewport={{ once: true, amount: 0.45 }}
           transition={{ duration: 0.6 }}
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+          <SectionBadge icon={Sparkles} tone="cyan">
             Plans for every stage
-          </p>
+          </SectionBadge>
           <h2
             id="pricing-heading"
             className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-white sm:text-5xl"
@@ -147,13 +148,13 @@ export function PricingFaq() {
                       </li>
                     ))}
                   </ul>
-                  <Button
+                  <RainbowButton
                     asChild
-                    variant={plan.featured ? "primary" : "secondary"}
+                    variant={plan.featured ? "default" : "outline"}
                     className="mt-8 w-full"
                   >
                     <Link href="/signup">Choose {plan.name}</Link>
-                  </Button>
+                  </RainbowButton>
                 </div>
               </MagicCard>
             </motion.div>
@@ -167,9 +168,9 @@ export function PricingFaq() {
             whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+            <SectionBadge icon={Sparkles} tone="pink">
               Frequently asked questions
-            </p>
+            </SectionBadge>
             <h2 className="mt-4 text-3xl font-semibold tracking-[-0.035em] text-white sm:text-4xl">
               Clear answers before you start.
             </h2>
@@ -246,12 +247,12 @@ export function PricingFaq() {
               with VoxaDesk AI.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <Button asChild>
+              <RainbowButton asChild>
                 <Link href="/signup">Build your AI receptionist</Link>
-              </Button>
-              <Button asChild variant="secondary">
+              </RainbowButton>
+              <RainbowButton asChild variant="outline">
                 <Link href="/demo">Try the voice demo</Link>
-              </Button>
+              </RainbowButton>
             </div>
           </div>
         </motion.div>

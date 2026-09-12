@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { MagicCard } from "@/components/magicui/magic-card";
+import { SectionBadge } from "@/components/landing/section-badge";
 
 const controls = [
   {
@@ -50,9 +51,9 @@ export function SecurityReliability() {
           viewport={{ once: true, amount: 0.35 }}
           transition={{ duration: 0.65 }}
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+          <SectionBadge icon={ShieldCheck} tone="violet">
             Security with operational depth
-          </p>
+          </SectionBadge>
           <h2
             id="security-heading"
             className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-white sm:text-5xl"

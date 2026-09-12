@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { RainbowButton } from "@/components/ui/rainbow-button";
 import { WordRotate } from "@/components/ui/word-rotate";
 import { BrandLogo } from "@/components/brand-logo";
 import { TrustedIntegrations } from "@/components/landing/trusted-integrations";
@@ -51,15 +52,15 @@ export default function HomePage() {
             and brings in your team when a human touch matters.
           </p>
           <div className="mt-9 flex flex-wrap justify-center gap-3">
-            <Button asChild>
+            <RainbowButton asChild>
               <Link href="/signup">
                 Build your receptionist{" "}
                 <ArrowRight className="ml-2" size={17} />
               </Link>
-            </Button>
-            <Button asChild variant="secondary">
+            </RainbowButton>
+            <RainbowButton asChild variant="outline">
               <Link href="/demo">Try the voice demo</Link>
-            </Button>
+            </RainbowButton>
           </div>
           <div className="mt-10 flex justify-center gap-6 text-xs text-slate-400">
             <span className="flex gap-2">

@@ -4,9 +4,11 @@ import { cn } from "@/lib/utils";
 export function Marquee({
   children,
   className,
+  reverse = false,
 }: {
   children: ReactNode;
   className?: string;
+  reverse?: boolean;
 }) {
   return (
     <div
@@ -15,8 +17,13 @@ export function Marquee({
         className,
       )}
     >
-      <div className="magic-marquee-track">{children}</div>
-      <div className="magic-marquee-track" aria-hidden="true">
+      <div className={cn("magic-marquee-track", reverse && "magic-marquee-track-reverse")}>
+        {children}
+      </div>
+      <div
+        className={cn("magic-marquee-track", reverse && "magic-marquee-track-reverse")}
+        aria-hidden="true"
+      >
         {children}
       </div>
     </div>

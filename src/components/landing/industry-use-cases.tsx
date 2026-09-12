@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { MagicCard } from "@/components/magicui/magic-card";
+import { SectionBadge } from "@/components/landing/section-badge";
 
 const industries = [
   {
@@ -82,9 +83,9 @@ export function IndustryUseCases() {
           transition={{ duration: 0.6 }}
         >
           <div className="max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+            <SectionBadge icon={BriefcaseBusiness} tone="pink">
               Purpose-built customer experiences
-            </p>
+            </SectionBadge>
             <h2
               id="industries-heading"
               className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-white sm:text-5xl"

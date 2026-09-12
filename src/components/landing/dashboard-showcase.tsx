@@ -12,6 +12,7 @@ import {
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
+import { SectionBadge } from "@/components/landing/section-badge";
 
 const views = {
   calls: {
@@ -81,9 +82,9 @@ export function DashboardShowcase() {
           viewport={{ once: true, amount: 0.45 }}
           transition={{ duration: 0.6 }}
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+          <SectionBadge icon={BarChart3} tone="cyan">
             One operational command center
-          </p>
+          </SectionBadge>
           <h2
             id="dashboard-heading"
             className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-white sm:text-5xl"
