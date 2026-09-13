@@ -59,9 +59,9 @@ export function OutcomeEstimator() {
       className="relative overflow-hidden px-6 py-24 sm:py-28"
       aria-labelledby="outcomes-heading"
     >
-      <div className="pointer-events-none absolute right-[-10%] top-0 size-[480px] rounded-full bg-violet-500/[0.045] blur-[120px]" />
+      <div className="pointer-events-none absolute right-[-10%] top-0 size-120 rounded-full bg-violet-500/4.5 blur-[120px]" />
       <motion.div
-        className="pointer-events-none absolute -left-24 bottom-16 size-72 rounded-full bg-amber-400/[0.045] blur-[100px]"
+        className="pointer-events-none absolute -left-24 bottom-16 size-72 rounded-full bg-amber-400/4.5 blur-[100px]"
         animate={
           reduceMotion
             ? undefined
@@ -167,7 +167,7 @@ export function OutcomeEstimator() {
                 {estimates.map(({ label, value, icon: Icon }, index) => (
                   <motion.div
                     key={label}
-                    className="relative overflow-hidden rounded-xl border border-white/[0.07] bg-white/[0.025] p-4"
+                    className="relative overflow-hidden rounded-xl border border-white/[0.07] bg-white/2.5 p-4"
                     initial={reduceMotion ? undefined : { opacity: 0, y: 12 }}
                     whileInView={
                       reduceMotion ? undefined : { opacity: 1, y: 0 }

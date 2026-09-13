@@ -111,7 +111,7 @@ export function HowItWorks() {
                 <div className="relative z-10">
                   <div className="flex items-center justify-between">
                     <motion.span
-                      className="grid size-12 place-items-center rounded-xl border border-primary/25 bg-primary/10 text-primary shadow-[0_0_24px_oklch(0.82_0.16_170_/_0.08)]"
+                      className="grid size-12 place-items-center rounded-xl border border-primary/25 bg-primary/10 text-primary shadow-[0_0_24px_oklch(0.82_0.16_170/0.08)]"
                       animate={
                         reduceMotion
                           ? undefined
@@ -129,7 +129,9 @@ export function HowItWorks() {
                     <motion.span
                       className="font-display text-3xl font-semibold text-white/8"
                       animate={
-                        reduceMotion ? undefined : { opacity: [0.08, 0.18, 0.08] }
+                        reduceMotion
+                          ? undefined
+                          : { opacity: [0.08, 0.18, 0.08] }
                       }
                       transition={{
                         duration: 4.2,

@@ -80,7 +80,7 @@ export function PricingFaq() {
       className="relative overflow-hidden px-6 py-24 sm:py-28"
       aria-labelledby="pricing-heading"
     >
-      <div className="pointer-events-none absolute left-1/2 top-32 size-140 -translate-x-1/2 rounded-full bg-primary/[0.045] blur-[120px]" />
+      <div className="pointer-events-none absolute left-1/2 top-32 size-140 -translate-x-1/2 rounded-full bg-primary/4.5 blur-[120px]" />
       <div className="relative mx-auto max-w-6xl">
         <motion.div
           className="mx-auto max-w-3xl text-center"
@@ -118,7 +118,7 @@ export function PricingFaq() {
               whileHover={reduceMotion ? undefined : { y: -5 }}
             >
               <MagicCard
-                className={`relative h-full overflow-hidden rounded-2xl border p-6 sm:p-7 ${plan.featured ? "border-primary/35 bg-primary/[0.065] shadow-[0_24px_80px_oklch(0.82_0.16_170_/_0.08)]" : "border-white/[0.08] bg-[#0b0f1a]/90"}`}
+                className={`relative h-full overflow-hidden rounded-2xl border p-6 sm:p-7 ${plan.featured ? "border-primary/35 bg-primary/6.5 shadow-[0_24px_80px_oklch(0.82_0.16_170/0.08)]" : "border-white/8 bg-[#0b0f1a]/90"}`}
               >
                 <BorderBeam
                   colorFrom={plan.featured ? "#58e8c7" : "#7dd3fc"}
@@ -170,7 +170,7 @@ export function PricingFaq() {
 
         <div className="relative mx-auto mt-24 max-w-3xl">
           <motion.div
-            className="pointer-events-none absolute -left-28 top-24 size-64 rounded-full bg-pink-400/[0.055] blur-[90px]"
+            className="pointer-events-none absolute -left-28 top-24 size-64 rounded-full bg-pink-400/5.5 blur-[90px]"
             animate={
               reduceMotion
                 ? undefined
