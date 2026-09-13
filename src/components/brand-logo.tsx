@@ -12,23 +12,25 @@ export function BrandLogo({
   return (
     <Link
       href="/"
-      className={cn("inline-flex items-center gap-2.5", className)}
+      className={cn("group inline-flex items-center gap-2.5", className)}
       aria-label="VoxaDesk AI home"
     >
       <span
         className={cn(
-          "relative isolate shrink-0 overflow-hidden rounded-md bg-primary shadow-[0_0_20px_oklch(0.82_0.16_170/0.14)] ring-1 ring-primary/30",
+          "rainbow-logo relative isolate shrink-0 rounded-md p-px",
           compact ? "size-6" : "size-9",
         )}
       >
-        <Image
-          src="/voxadesk-logo-new.jpg"
-          alt=""
-          fill
-          priority
-          sizes={compact ? "24px" : "36px"}
-          className="scale-x-125 scale-y-110 object-cover mix-blend-multiply"
-        />
+        <span className="relative block size-full overflow-hidden rounded-[calc(0.375rem-1px)] bg-primary">
+          <Image
+            src="/voxadesk-logo-new.jpg"
+            alt=""
+            fill
+            priority
+            sizes={compact ? "22px" : "34px"}
+            className="scale-x-125 scale-y-110 object-cover mix-blend-multiply"
+          />
+        </span>
       </span>
 
       <span

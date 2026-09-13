@@ -93,10 +93,10 @@ export function IntegrationEcosystem() {
   return (
     <section
       id="integrations"
-      className="relative overflow-hidden border-y border-white/[0.06] bg-[#080b14] px-6 py-24 sm:py-28"
+      className="relative overflow-hidden border-y border-white/6 bg-[#080b14] px-6 py-24 sm:py-28"
       aria-labelledby="ecosystem-heading"
     >
-      <div className="pointer-events-none absolute left-1/2 top-1/2 size-[620px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.04] blur-[120px]" />
+      <div className="pointer-events-none absolute left-1/2 top-1/2 size-155 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/4 blur-[120px]" />
       <div className="relative mx-auto max-w-6xl">
         <motion.div
           className="mx-auto max-w-3xl text-center"
@@ -119,6 +119,39 @@ export function IntegrationEcosystem() {
             workflows that keep your operation moving.
           </p>
         </motion.div>
+
+        <svg
+          className="pointer-events-none absolute inset-x-0 top-52 hidden h-130 w-full opacity-35 lg:block"
+          viewBox="0 0 1200 520"
+          preserveAspectRatio="none"
+          fill="none"
+          aria-hidden="true"
+        >
+          {[80, 180, 285, 390, 490].map((y, index) => (
+            <motion.path
+              key={y}
+              d={`M 360 ${y} C 520 ${y}, 545 260, 720 260`}
+              stroke={index % 2 === 0 ? "#58e8c7" : "#7dd3fc"}
+              strokeWidth="1"
+              strokeDasharray="7 13"
+              initial={{ opacity: 0, pathLength: 0 }}
+              whileInView={{ opacity: 0.42, pathLength: 1 }}
+              animate={
+                reduceMotion ? undefined : { strokeDashoffset: [0, -80] }
+              }
+              viewport={{ once: true }}
+              transition={{
+                pathLength: { duration: 1.4, delay: index * 0.1 },
+                opacity: { duration: 0.6, delay: index * 0.1 },
+                strokeDashoffset: {
+                  duration: 4 + index * 0.35,
+                  repeat: Infinity,
+                  ease: "linear",
+                },
+              }}
+            />
+          ))}
+        </svg>
 
         <div className="mt-14 grid items-stretch gap-6 lg:grid-cols-[0.9fr_1.1fr]">
           <motion.div
@@ -147,20 +180,53 @@ export function IntegrationEcosystem() {
                     visible: { opacity: 1, y: 0 },
                   }}
                   whileHover={reduceMotion ? undefined : { y: -3 }}
-                  className={`relative overflow-hidden rounded-2xl border p-5 text-left transition ${active ? "border-primary/30 bg-primary/[0.07]" : "border-white/[0.08] bg-white/[0.025] hover:border-white/[0.14]"}`}
+                  className={`relative overflow-hidden rounded-2xl border p-5 text-left transition ${active ? "border-primary/30 bg-primary/[0.07]" : "border-white/8 bg-white/2.5 hover:border-white/[0.14]"}`}
                   aria-pressed={active}
                 >
                   {active && (
-                    <motion.span
-                      layoutId="integration-active"
-                      className="absolute inset-x-4 bottom-0 h-px bg-primary shadow-[0_0_12px_var(--primary)]"
-                    />
+                    <>
+                      <motion.span
+                        layoutId="integration-active"
+                        className="absolute inset-0 rounded-2xl bg-primary/2.5"
+                        transition={{
+                          type: "spring",
+                          stiffness: 280,
+                          damping: 28,
+                        }}
+                      />
+                      <motion.span
+                        className="absolute inset-x-4 bottom-0 h-px bg-primary shadow-[0_0_12px_var(--primary)]"
+                        animate={
+                          reduceMotion
+                            ? undefined
+                            : {
+                                opacity: [0.4, 1, 0.4],
+                                scaleX: [0.45, 1, 0.45],
+                              }
+                        }
+                        transition={{ duration: 2.8, repeat: Infinity }}
+                      />
+                    </>
                   )}
-                  <span
+                  <motion.span
                     className={`grid size-10 place-items-center rounded-xl border ${item.color}`}
+                    animate={
+                      active && !reduceMotion
+                        ? {
+                            y: [0, -3, 0],
+                            rotate: [0, 3, 0],
+                            scale: [1, 1.06, 1],
+                          }
+                        : undefined
+                    }
+                    transition={{
+                      duration: 3.2,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
                   >
                     <Icon size={18} />
-                  </span>
+                  </motion.span>
                   <span
                     className={`mt-4 block text-sm font-medium ${active ? "text-white" : "text-slate-300"}`}
                   >
@@ -174,7 +240,17 @@ export function IntegrationEcosystem() {
             })}
           </motion.div>
 
-          <MagicCard className="relative min-h-[430px] overflow-hidden rounded-2xl border border-white/[0.09] bg-[#0b0f1a]/95 p-6 sm:p-8">
+          <MagicCard className="relative min-h-107.5 overflow-hidden rounded-2xl border border-white/9 bg-[#0b0f1a]/95 p-6 sm:p-8">
+            <motion.div
+              className="pointer-events-none absolute -right-20 -top-24 size-72 rounded-full bg-primary/7.5 blur-[80px]"
+              animate={
+                reduceMotion
+                  ? undefined
+                  : { x: [0, -90, 0], y: [0, 70, 0], opacity: [0.3, 0.75, 0.3] }
+              }
+              transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
+              aria-hidden="true"
+            />
             <div className="relative z-10">
               <div className="flex items-center justify-between">
                 <div>
@@ -185,9 +261,36 @@ export function IntegrationEcosystem() {
                     {current.label} automation
                   </h3>
                 </div>
-                <span className="grid size-10 place-items-center rounded-xl border border-primary/20 bg-primary/10 text-primary">
+                <motion.span
+                  className="relative grid size-10 place-items-center rounded-xl border border-primary/20 bg-primary/10 text-primary"
+                  animate={
+                    reduceMotion
+                      ? undefined
+                      : {
+                          y: [0, -3, 0],
+                          boxShadow: [
+                            "0 0 0px transparent",
+                            "0 0 22px oklch(0.82 0.16 170 / 0.2)",
+                            "0 0 0px transparent",
+                          ],
+                        }
+                  }
+                  transition={{
+                    duration: 3.8,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
                   <Cloud size={19} />
-                </span>
+                  {!reduceMotion && (
+                    <motion.span
+                      className="absolute -inset-2 rounded-xl border border-primary/15"
+                      animate={{ scale: [0.8, 1.35], opacity: [0.55, 0] }}
+                      transition={{ duration: 2.6, repeat: Infinity }}
+                      aria-hidden="true"
+                    />
+                  )}
+                </motion.span>
               </div>
               <AnimatePresence mode="wait">
                 <motion.div
@@ -212,15 +315,32 @@ export function IntegrationEcosystem() {
                                 ? undefined
                                 : { scale: 0.7, opacity: 0 }
                             }
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ delay: index * 0.12 }}
+                            animate={
+                              reduceMotion
+                                ? { scale: 1, opacity: 1 }
+                                : {
+                                    scale: [1, 1.08, 1],
+                                    opacity: 1,
+                                    boxShadow: [
+                                      "0 0 0px transparent",
+                                      "0 0 18px oklch(0.82 0.16 170 / 0.2)",
+                                      "0 0 0px transparent",
+                                    ],
+                                  }
+                            }
+                            transition={{
+                              duration: 3.2,
+                              delay: index * 0.55,
+                              repeat: reduceMotion ? 0 : Infinity,
+                              ease: "easeInOut",
+                            }}
                           >
                             {index + 1}
                           </motion.span>
                           {index < current.flow.length - 1 && (
-                            <span className="absolute bottom-[-18px] top-9 w-px overflow-hidden bg-white/[0.08]">
+                            <span className="absolute -bottom-4.5 top-9 w-px overflow-hidden bg-white/8">
                               <motion.span
-                                className="block h-1/2 w-px bg-gradient-to-b from-primary to-transparent"
+                                className="block h-1/2 w-px bg-linear-to-b from-primary to-transparent"
                                 animate={
                                   reduceMotion
                                     ? undefined
@@ -236,12 +356,13 @@ export function IntegrationEcosystem() {
                           )}
                         </div>
                         <motion.div
-                          className="flex-1 rounded-xl border border-white/[0.07] bg-white/[0.025] px-4 py-4"
+                          className="flex-1 rounded-xl border border-white/[0.07] bg-white/2.5 px-4 py-4"
                           initial={
                             reduceMotion ? undefined : { opacity: 0, y: 8 }
                           }
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.08 + index * 0.12 }}
+                          whileHover={reduceMotion ? undefined : { x: 5 }}
                         >
                           <p className="text-sm font-medium text-slate-200">
                             {step}
@@ -253,8 +374,16 @@ export function IntegrationEcosystem() {
                       </div>
                     ))}
                   </div>
-                  <div className="mt-8 flex items-center gap-3 rounded-xl border border-primary/15 bg-primary/[0.045] px-4 py-3">
-                    <span className="size-2 rounded-full bg-primary shadow-[0_0_10px_var(--primary)]" />
+                  <div className="mt-8 flex items-center gap-3 rounded-xl border border-primary/15 bg-primary/4.5 px-4 py-3">
+                    <motion.span
+                      className="size-2 rounded-full bg-primary shadow-[0_0_10px_var(--primary)]"
+                      animate={
+                        reduceMotion
+                          ? undefined
+                          : { opacity: [0.4, 1, 0.4], scale: [0.8, 1.25, 0.8] }
+                      }
+                      transition={{ duration: 2, repeat: Infinity }}
+                    />
                     <p className="text-xs text-slate-400">
                       Every action is recorded as a traceable outcome.
                     </p>

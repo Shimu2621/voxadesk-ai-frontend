@@ -27,9 +27,9 @@ export default function HomePage() {
             <Button asChild variant="ghost">
               <Link href="/login">Log in</Link>
             </Button>
-            <Button asChild>
+            <RainbowButton asChild>
               <Link href="/signup">Get started</Link>
-            </Button>
+            </RainbowButton>
           </div>
         </nav>
         <section className="relative mx-auto max-w-5xl px-6 pb-24 pt-20 text-center">

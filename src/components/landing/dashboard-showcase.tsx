@@ -12,6 +12,7 @@ import {
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
+import { BorderBeam } from "@/components/magicui/border-beam";
 import { SectionBadge } from "@/components/landing/section-badge";
 
 const views = {
@@ -70,10 +71,10 @@ export function DashboardShowcase() {
   const current = views[view];
   return (
     <section
-      className="relative overflow-hidden border-y border-white/[0.06] bg-[#080b14] px-6 py-24 sm:py-28"
+      className="relative overflow-hidden border-y border-white/6 bg-[#080b14] px-6 py-24 sm:py-28"
       aria-labelledby="dashboard-heading"
     >
-      <AnimatedGridPattern className="text-primary opacity-15 [mask-image:linear-gradient(to_bottom,transparent,black_30%,black_75%,transparent)]" />
+      <AnimatedGridPattern className="text-primary opacity-15 mask-[linear-gradient(to_bottom,transparent,black_30%,black_75%,transparent)]" />
       <div className="relative mx-auto max-w-6xl">
         <motion.div
           className="mx-auto max-w-3xl text-center"
@@ -106,13 +107,68 @@ export function DashboardShowcase() {
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.75, ease: "easeOut" }}
         >
-          <div className="pointer-events-none absolute -inset-6 rounded-[2rem] bg-primary/[0.045] blur-3xl" />
-          <Card className="relative overflow-hidden border-white/[0.1] bg-[#090d17]/95 p-0 shadow-[0_35px_100px_rgba(0,0,0,0.45)]">
-            <div className="flex flex-col border-b border-white/[0.08] sm:flex-row sm:items-center sm:justify-between">
+          <div className="pointer-events-none absolute -inset-6 rounded-4xl bg-primary/4.5 blur-3xl" />
+          <motion.div
+            className="pointer-events-none absolute -inset-y-10 -left-24 w-64 rounded-full bg-cyan-400/7.5 blur-[85px]"
+            animate={
+              reduceMotion
+                ? undefined
+                : { x: [0, 760, 0], opacity: [0.25, 0.65, 0.25] }
+            }
+            transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+            aria-hidden="true"
+          />
+          <Card className="relative overflow-hidden border-white/10 bg-[#090d17]/95 p-0 shadow-[0_35px_100px_rgba(0,0,0,0.45)]">
+            <BorderBeam duration={8} colorFrom="#58e8c7" colorTo="#22d3ee" />
+            {!reduceMotion && (
+              <motion.div
+                className="pointer-events-none absolute inset-x-0 z-20 h-px bg-linear-to-r from-transparent via-primary/45 to-transparent shadow-[0_0_18px_oklch(0.82_0.16_170/0.2)]"
+                animate={{ top: ["12%", "94%"], opacity: [0, 0.7, 0.7, 0] }}
+                transition={{
+                  duration: 6.5,
+                  repeat: Infinity,
+                  repeatDelay: 1.5,
+                  ease: "easeInOut",
+                }}
+                aria-hidden="true"
+              />
+            )}
+            <div className="flex flex-col border-b border-white/8 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-3 px-5 py-4 sm:px-6">
-                <span className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/20">
+                <motion.span
+                  className="relative flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/20"
+                  animate={
+                    reduceMotion
+                      ? undefined
+                      : {
+                          boxShadow: [
+                            "0 0 0px transparent",
+                            "0 0 18px oklch(0.82 0.16 170 / 0.18)",
+                            "0 0 0px transparent",
+                          ],
+                        }
+                  }
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
                   <BarChart3 size={16} />
-                </span>
+                  <motion.span
+                    className="absolute -right-0.5 -top-0.5 size-2 rounded-full bg-primary ring-2 ring-[#090d17]"
+                    animate={
+                      reduceMotion
+                        ? undefined
+                        : {
+                            opacity: [0.45, 1, 0.45],
+                            scale: [0.85, 1.15, 0.85],
+                          }
+                    }
+                    transition={{ duration: 1.8, repeat: Infinity }}
+                    aria-hidden="true"
+                  />
+                </motion.span>
                 <div>
                   <p className="text-sm font-medium text-white">
                     VoxaDesk overview
@@ -169,8 +225,26 @@ export function DashboardShowcase() {
                       initial={reduceMotion ? undefined : { opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.07 }}
-                      className="rounded-xl border border-white/[0.07] bg-white/[0.025] p-4"
+                      className="relative overflow-hidden rounded-xl border border-white/[0.07] bg-white/2.5 p-4"
                     >
+                      <motion.span
+                        className="pointer-events-none absolute -right-8 -top-8 size-20 rounded-full bg-primary/[0.07] blur-xl"
+                        animate={
+                          reduceMotion
+                            ? undefined
+                            : {
+                                opacity: [0.25, 0.7, 0.25],
+                                scale: [0.8, 1.15, 0.8],
+                              }
+                        }
+                        transition={{
+                          duration: 4.5,
+                          delay: index * 0.6,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
+                        aria-hidden="true"
+                      />
                       <div className="flex items-center justify-between">
                         <p className="text-xs text-slate-500">{label}</p>
                         <span className="text-[10px] font-medium text-primary">
@@ -184,7 +258,7 @@ export function DashboardShowcase() {
                   ))}
                 </div>
                 <div className="mt-4 grid gap-4 lg:grid-cols-[1.25fr_0.75fr]">
-                  <div className="rounded-xl border border-white/[0.07] bg-white/[0.025] p-5">
+                  <div className="rounded-xl border border-white/[0.07] bg-white/2.5 p-5">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm font-medium text-white">
@@ -203,7 +277,7 @@ export function DashboardShowcase() {
                           className="flex h-full flex-1 items-end"
                         >
                           <motion.div
-                            className="w-full rounded-t bg-gradient-to-t from-primary/25 to-primary"
+                            className="dashboard-live-bar relative w-full overflow-hidden rounded-t bg-linear-to-t from-primary/25 to-primary"
                             initial={{
                               height: reduceMotion ? `${height}%` : 0,
                             }}
@@ -213,12 +287,17 @@ export function DashboardShowcase() {
                               delay: reduceMotion ? 0 : index * 0.035,
                               ease: "easeOut",
                             }}
-                          />
+                          >
+                            <span
+                              className="dashboard-bar-shine"
+                              aria-hidden="true"
+                            />
+                          </motion.div>
                         </div>
                       ))}
                     </div>
                   </div>
-                  <div className="rounded-xl border border-white/[0.07] bg-white/[0.025] p-5">
+                  <div className="rounded-xl border border-white/[0.07] bg-white/2.5 p-5">
                     <div className="flex items-center justify-between">
                       <p className="text-sm font-medium text-white">
                         Recent outcomes
@@ -234,12 +313,26 @@ export function DashboardShowcase() {
                           }
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: 0.12 + index * 0.08 }}
-                          className="flex items-center gap-3 rounded-lg border border-white/[0.06] bg-black/10 p-3"
+                          className="flex items-center gap-3 rounded-lg border border-white/6 bg-black/10 p-3"
                         >
-                          <CheckCircle2
-                            size={15}
+                          <motion.span
                             className="shrink-0 text-primary"
-                          />
+                            animate={
+                              reduceMotion
+                                ? undefined
+                                : {
+                                    opacity: [0.45, 1, 0.45],
+                                    scale: [0.9, 1.08, 0.9],
+                                  }
+                            }
+                            transition={{
+                              duration: 2.6,
+                              delay: index * 0.45,
+                              repeat: Infinity,
+                            }}
+                          >
+                            <CheckCircle2 size={15} />
+                          </motion.span>
                           <div className="min-w-0 flex-1">
                             <p className="truncate text-xs font-medium text-slate-300">
                               {title}

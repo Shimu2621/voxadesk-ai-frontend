@@ -73,7 +73,17 @@ export function IndustryUseCases() {
       className="relative overflow-hidden px-6 py-24 sm:py-28"
       aria-labelledby="industries-heading"
     >
-      <div className="pointer-events-none absolute -left-40 top-20 size-96 rounded-full bg-primary/[0.045] blur-[110px]" />
+      <div className="pointer-events-none absolute -left-40 top-20 size-96 rounded-full bg-primary/4.5 blur-[110px]" />
+      <motion.div
+        className="pointer-events-none absolute -right-32 bottom-16 size-80 rounded-full bg-pink-400/5.5 blur-[105px]"
+        animate={
+          reduceMotion
+            ? undefined
+            : { x: [0, -130, 0], y: [0, -70, 0], opacity: [0.3, 0.7, 0.3] }
+        }
+        transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+        aria-hidden="true"
+      />
       <div className="relative mx-auto max-w-6xl">
         <motion.div
           className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between"
@@ -110,16 +120,69 @@ export function IndustryUseCases() {
                 duration: 0.48,
                 delay: reduceMotion ? 0 : (index % 4) * 0.07,
               }}
-              whileHover={reduceMotion ? undefined : { y: -5 }}
+              whileHover={
+                reduceMotion
+                  ? undefined
+                  : { y: -7, rotateX: 1.5, rotateY: index % 2 ? -1.5 : 1.5 }
+              }
             >
-              <MagicCard className="group h-full min-h-[245px] overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0b0f1a]/90 p-6 transition-colors hover:border-white/[0.14]">
+              <MagicCard className="group relative h-full min-h-61.25 overflow-hidden rounded-2xl border border-white/8 bg-[#0b0f1a]/90 p-6 transition-colors hover:border-white/[0.14]">
+                <motion.span
+                  className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 skew-x-[-18deg] bg-linear-to-r from-transparent via-white/5.5 to-transparent"
+                  animate={
+                    reduceMotion ? undefined : { left: ["-50%", "140%"] }
+                  }
+                  transition={{
+                    duration: 4.8,
+                    delay: index * 0.55,
+                    repeat: Infinity,
+                    repeatDelay: 2.5,
+                    ease: "easeInOut",
+                  }}
+                  aria-hidden="true"
+                />
+                <motion.span
+                  className={`pointer-events-none absolute -bottom-8 -right-5 opacity-[0.035] ${accent.split(" ")[0]}`}
+                  animate={
+                    reduceMotion
+                      ? undefined
+                      : {
+                          rotate: [0, 8, 0],
+                          scale: [1, 1.12, 1],
+                          opacity: [0.025, 0.065, 0.025],
+                        }
+                  }
+                  transition={{
+                    duration: 6 + (index % 3),
+                    delay: index * 0.4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  aria-hidden="true"
+                >
+                  <Icon size={112} strokeWidth={1} />
+                </motion.span>
                 <div className="relative z-10 flex h-full flex-col">
                   <div className="flex items-start justify-between">
-                    <span
+                    <motion.span
                       className={`grid size-11 place-items-center rounded-xl border ${accent}`}
+                      animate={
+                        reduceMotion
+                          ? undefined
+                          : {
+                              y: [0, -4, 0],
+                              rotate: [0, index % 2 ? -2 : 2, 0],
+                            }
+                      }
+                      transition={{
+                        duration: 3.8 + (index % 3) * 0.5,
+                        delay: index * 0.35,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
                     >
                       <Icon size={20} />
-                    </span>
+                    </motion.span>
                     <motion.span
                       className="text-slate-700 transition-colors group-hover:text-primary"
                       whileHover={reduceMotion ? undefined : { x: 2, y: -2 }}
@@ -135,7 +198,7 @@ export function IndustryUseCases() {
                   </div>
                 </div>
                 <div
-                  className="pointer-events-none absolute -bottom-12 -right-12 size-28 rounded-full bg-white/[0.02] transition-transform duration-500 group-hover:scale-150"
+                  className="pointer-events-none absolute -bottom-12 -right-12 size-28 rounded-full bg-white/2 transition-transform duration-500 group-hover:scale-150"
                   aria-hidden="true"
                 />
               </MagicCard>
@@ -144,7 +207,7 @@ export function IndustryUseCases() {
         </div>
 
         <motion.div
-          className="mt-8 flex flex-col items-center justify-between gap-4 rounded-2xl border border-primary/15 bg-primary/[0.045] px-6 py-5 text-center sm:flex-row sm:text-left"
+          className="mt-8 flex flex-col items-center justify-between gap-4 rounded-2xl border border-primary/15 bg-primary/4.5 px-6 py-5 text-center sm:flex-row sm:text-left"
           initial={reduceMotion ? undefined : { opacity: 0, y: 14 }}
           whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true }}

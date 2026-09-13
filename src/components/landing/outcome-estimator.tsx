@@ -60,6 +60,20 @@ export function OutcomeEstimator() {
       aria-labelledby="outcomes-heading"
     >
       <div className="pointer-events-none absolute right-[-10%] top-0 size-[480px] rounded-full bg-violet-500/[0.045] blur-[120px]" />
+      <motion.div
+        className="pointer-events-none absolute -left-24 bottom-16 size-72 rounded-full bg-amber-400/[0.045] blur-[100px]"
+        animate={
+          reduceMotion
+            ? undefined
+            : {
+                x: [0, 130, 0],
+                opacity: [0.25, 0.65, 0.25],
+                scale: [0.9, 1.12, 0.9],
+              }
+        }
+        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+        aria-hidden="true"
+      />
       <div className="relative mx-auto max-w-6xl">
         <motion.div
           className="mx-auto max-w-3xl text-center"
@@ -84,7 +98,18 @@ export function OutcomeEstimator() {
         </motion.div>
 
         <div className="mt-14 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-          <MagicCard className="relative overflow-hidden rounded-2xl border border-white/[0.09] bg-[#0b0f1a]/95 p-6 sm:p-8">
+          <MagicCard className="relative overflow-hidden rounded-2xl border border-white/9 bg-[#0b0f1a]/95 p-6 sm:p-8">
+            <motion.div
+              className="pointer-events-none absolute inset-y-0 w-24 bg-linear-to-r from-transparent via-primary/4.5 to-transparent blur-xl"
+              animate={reduceMotion ? undefined : { left: ["-20%", "110%"] }}
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                repeatDelay: 1.5,
+                ease: "easeInOut",
+              }}
+              aria-hidden="true"
+            />
             <div className="relative z-10">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div>
@@ -112,8 +137,17 @@ export function OutcomeEstimator() {
                   </span>
                 </div>
               </div>
-              <label className="mt-8 block">
+              <label className="relative mt-8 block">
                 <span className="sr-only">Weekly call volume</span>
+                <motion.span
+                  className="pointer-events-none absolute left-0 top-0 h-1.25 rounded-full bg-white/25 shadow-[0_0_12px_oklch(0.82_0.16_170/0.2)]"
+                  animate={{ width: `${((calls - 50) / 950) * 100}%` }}
+                  transition={{
+                    duration: reduceMotion ? 0 : 0.3,
+                    ease: "easeOut",
+                  }}
+                  aria-hidden="true"
+                />
                 <input
                   className="outcome-range w-full"
                   type="range"
@@ -133,7 +167,7 @@ export function OutcomeEstimator() {
                 {estimates.map(({ label, value, icon: Icon }, index) => (
                   <motion.div
                     key={label}
-                    className="rounded-xl border border-white/[0.07] bg-white/[0.025] p-4"
+                    className="relative overflow-hidden rounded-xl border border-white/[0.07] bg-white/[0.025] p-4"
                     initial={reduceMotion ? undefined : { opacity: 0, y: 12 }}
                     whileInView={
                       reduceMotion ? undefined : { opacity: 1, y: 0 }
@@ -141,7 +175,39 @@ export function OutcomeEstimator() {
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.08 }}
                   >
-                    <Icon size={16} className="text-primary" />
+                    <motion.span
+                      className="inline-flex text-primary"
+                      animate={
+                        reduceMotion
+                          ? undefined
+                          : { y: [0, -3, 0], scale: [1, 1.08, 1] }
+                      }
+                      transition={{
+                        duration: 3.4,
+                        delay: index * 0.55,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                    >
+                      <Icon size={16} />
+                    </motion.span>
+                    <motion.span
+                      className="pointer-events-none absolute -right-8 -top-8 size-20 rounded-full bg-primary/[0.07] blur-xl"
+                      animate={
+                        reduceMotion
+                          ? undefined
+                          : {
+                              opacity: [0.2, 0.75, 0.2],
+                              scale: [0.8, 1.2, 0.8],
+                            }
+                      }
+                      transition={{
+                        duration: 4.2,
+                        delay: index * 0.7,
+                        repeat: Infinity,
+                      }}
+                      aria-hidden="true"
+                    />
                     <AnimatePresence mode="popLayout">
                       <motion.p
                         key={value}
@@ -181,11 +247,45 @@ export function OutcomeEstimator() {
                 }}
                 whileHover={reduceMotion ? undefined : { x: 4 }}
               >
-                <MagicCard className="relative h-full overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.025] p-5">
+                <MagicCard className="relative h-full overflow-hidden rounded-2xl border border-white/8 bg-white/2.5 p-5">
+                  <motion.span
+                    className="pointer-events-none absolute left-0 top-0 h-full w-px bg-linear-to-b from-transparent via-primary/70 to-transparent"
+                    animate={
+                      reduceMotion
+                        ? { opacity: 0.45 }
+                        : { y: ["-100%", "100%"], opacity: [0, 0.9, 0] }
+                    }
+                    transition={{
+                      duration: 3.8,
+                      delay: index * 0.65,
+                      repeat: reduceMotion ? 0 : Infinity,
+                      repeatDelay: 1.2,
+                    }}
+                    aria-hidden="true"
+                  />
                   <div className="relative z-10 flex gap-4">
-                    <span className="grid size-10 shrink-0 place-items-center rounded-xl border border-primary/20 bg-primary/10 text-primary">
+                    <motion.span
+                      className="grid size-10 shrink-0 place-items-center rounded-xl border border-primary/20 bg-primary/10 text-primary"
+                      animate={
+                        reduceMotion
+                          ? undefined
+                          : {
+                              rotate: [0, 3, 0],
+                              boxShadow: [
+                                "0 0 0px transparent",
+                                "0 0 18px oklch(0.82 0.16 170 / 0.13)",
+                                "0 0 0px transparent",
+                              ],
+                            }
+                      }
+                      transition={{
+                        duration: 4,
+                        delay: index * 0.6,
+                        repeat: Infinity,
+                      }}
+                    >
                       <Icon size={18} />
-                    </span>
+                    </motion.span>
                     <div>
                       <h3 className="text-base font-medium text-white">
                         {title}
@@ -202,7 +302,7 @@ export function OutcomeEstimator() {
         </div>
 
         <motion.div
-          className="mt-10 flex flex-col items-center justify-between gap-5 rounded-2xl border border-white/[0.08] bg-gradient-to-r from-primary/[0.07] via-white/[0.025] to-violet-500/[0.06] px-6 py-6 text-center sm:flex-row sm:text-left"
+          className="mt-10 flex flex-col items-center justify-between gap-5 rounded-2xl border border-white/8 bg-linear-to-r from-primary/[0.07] via-white/2.5 to-violet-500/6 px-6 py-6 text-center sm:flex-row sm:text-left"
           initial={reduceMotion ? undefined : { opacity: 0, y: 16 }}
           whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true }}

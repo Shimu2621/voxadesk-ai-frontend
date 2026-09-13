@@ -11,7 +11,6 @@ import {
   Sparkles,
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Button } from "@/components/ui/button";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { Card } from "@/components/ui/card";
 import { SectionBadge } from "@/components/landing/section-badge";
@@ -71,7 +70,25 @@ export function InteractiveCallDemo() {
       className="relative overflow-hidden px-6 py-24 sm:py-28"
       aria-labelledby="demo-heading"
     >
-      <div className="pointer-events-none absolute left-1/2 top-1/2 size-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.055] blur-[110px]" />
+      <div className="pointer-events-none absolute left-1/2 top-1/2 size-130 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/5.5 blur-[110px]" />
+      {[0, 1, 2].map((ring) => (
+        <motion.div
+          key={ring}
+          className="pointer-events-none absolute right-[8%] top-1/2 hidden size-52 -translate-y-1/2 rounded-full border border-primary/10 lg:block"
+          animate={
+            reduceMotion
+              ? { opacity: 0.12 }
+              : { scale: [0.65, 1.8], opacity: [0.22, 0] }
+          }
+          transition={{
+            duration: 5.4,
+            delay: ring * 1.8,
+            repeat: reduceMotion ? 0 : Infinity,
+            ease: "easeOut",
+          }}
+          aria-hidden="true"
+        />
+      ))}
       <div className="relative mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:gap-20">
         <motion.div
           initial={reduceMotion ? undefined : { opacity: 0, x: -24 }}
@@ -120,15 +137,37 @@ export function InteractiveCallDemo() {
           viewport={{ once: true, amount: 0.25 }}
           transition={{ duration: 0.7, delay: 0.08, ease: "easeOut" }}
         >
-          <Card className="relative overflow-hidden border-white/[0.1] bg-[#0b0e19]/90 p-0 shadow-[0_30px_100px_rgba(0,0,0,0.35)]">
-            <div className="flex items-center justify-between border-b border-white/[0.08] px-5 py-4 sm:px-6">
+          <Card className="relative overflow-hidden border-white/10 bg-[#0b0e19]/90 p-0 shadow-[0_30px_100px_rgba(0,0,0,0.35)]">
+            <motion.div
+              className="pointer-events-none absolute -right-24 top-10 size-64 rounded-full bg-primary/[0.07] blur-[80px]"
+              animate={
+                active && !reduceMotion
+                  ? { x: [0, -90, 0], y: [0, 120, 0], opacity: [0.3, 0.75, 0.3] }
+                  : { opacity: 0.25 }
+              }
+              transition={{ duration: 8, repeat: active ? Infinity : 0, ease: "easeInOut" }}
+              aria-hidden="true"
+            />
+            <div className="flex items-center justify-between border-b border-white/8 px-5 py-4 sm:px-6">
               <div className="flex items-center gap-3">
-                <span className="relative flex size-9 items-center justify-center rounded-full bg-primary/10 text-primary ring-1 ring-primary/25">
+                <motion.span
+                  className="relative flex size-9 items-center justify-center rounded-full bg-primary/10 text-primary ring-1 ring-primary/25"
+                  animate={
+                    active && !reduceMotion
+                      ? { scale: [1, 1.07, 1], boxShadow: ["0 0 0px transparent", "0 0 22px oklch(0.82 0.16 170 / 0.22)", "0 0 0px transparent"] }
+                      : undefined
+                  }
+                  transition={{ duration: 2.4, repeat: Infinity }}
+                >
                   <PhoneCall size={17} />
                   {active && (
-                    <span className="absolute -right-0.5 -top-0.5 size-2.5 rounded-full bg-primary ring-2 ring-[#0b0e19]" />
+                    <motion.span
+                      className="absolute -right-0.5 -top-0.5 size-2.5 rounded-full bg-primary ring-2 ring-[#0b0e19]"
+                      animate={reduceMotion ? undefined : { opacity: [0.4, 1, 0.4], scale: [0.8, 1.2, 0.8] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                    />
                   )}
-                </span>
+                </motion.span>
                 <div>
                   <p className="text-sm font-medium text-white">
                     VoxaDesk live preview
@@ -138,12 +177,20 @@ export function InteractiveCallDemo() {
                   </p>
                 </div>
               </div>
-              <span className="rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1.5 text-[11px] font-medium text-slate-400">
+              <motion.span
+                className="rounded-full border border-white/8 bg-white/4 px-3 py-1.5 text-[11px] font-medium text-slate-400"
+                animate={
+                  active && !reduceMotion
+                    ? { borderColor: ["rgba(255,255,255,.08)", "rgba(88,232,199,.4)", "rgba(255,255,255,.08)"] }
+                    : undefined
+                }
+                transition={{ duration: 2.8, repeat: Infinity }}
+              >
                 {active ? "Listening" : "Ready"}
-              </span>
+              </motion.span>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 border-b border-white/[0.08] p-3 sm:p-4">
+            <div className="grid grid-cols-3 gap-2 border-b border-white/8 p-3 sm:p-4">
               {(Object.keys(scenarios) as Scenario[]).map((key) => {
                 const item = scenarios[key];
                 const Icon = item.icon;
@@ -155,7 +202,7 @@ export function InteractiveCallDemo() {
                       setScenario(key);
                       setActive(false);
                     }}
-                    className={`flex items-center justify-center gap-2 rounded-lg px-2 py-2.5 text-xs font-medium transition ${scenario === key ? "bg-primary/12 text-primary ring-1 ring-primary/25" : "text-slate-500 hover:bg-white/[0.04] hover:text-slate-300"}`}
+                    className={`flex items-center justify-center gap-2 rounded-lg px-2 py-2.5 text-xs font-medium transition ${scenario === key ? "bg-primary/12 text-primary ring-1 ring-primary/25" : "text-slate-500 hover:bg-white/4 hover:text-slate-300"}`}
                     aria-pressed={scenario === key}
                   >
                     <Icon size={14} />{" "}
@@ -165,9 +212,15 @@ export function InteractiveCallDemo() {
               })}
             </div>
 
-            <div className="min-h-[330px] p-5 sm:p-6">
-              <div
-                className="mb-6 flex h-12 items-center justify-center gap-1 rounded-xl border border-white/[0.07] bg-white/[0.025] px-5"
+            <div className="min-h-82.5 p-5 sm:p-6">
+              <motion.div
+                className="mb-6 flex h-12 items-center justify-center gap-1 rounded-xl border border-white/[0.07] bg-white/2.5 px-5"
+                animate={
+                  active && !reduceMotion
+                    ? { boxShadow: ["inset 0 0 0px transparent", "inset 0 0 24px oklch(0.82 0.16 170 / 0.08)", "inset 0 0 0px transparent"] }
+                    : undefined
+                }
+                transition={{ duration: 3, repeat: Infinity }}
                 aria-hidden="true"
               >
                 {Array.from({ length: 30 }, (_, index) => (
@@ -187,7 +240,7 @@ export function InteractiveCallDemo() {
                     }}
                   />
                 ))}
-              </div>
+              </motion.div>
               <AnimatePresence mode="wait">
                 <motion.div
                   key={`${scenario}-${active}`}
@@ -207,7 +260,7 @@ export function InteractiveCallDemo() {
                         }
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: reduceMotion ? 0 : index * 0.14 }}
-                        className={`max-w-[88%] rounded-xl px-4 py-3 text-sm leading-6 ${speaker === "AI" ? "bg-white/[0.055] text-slate-300" : "ml-auto bg-primary/10 text-slate-200 ring-1 ring-primary/15"}`}
+                        className={`max-w-[88%] rounded-xl px-4 py-3 text-sm leading-6 ${speaker === "AI" ? "bg-white/5.5 text-slate-300" : "ml-auto bg-primary/10 text-slate-200 ring-1 ring-primary/15"}`}
                       >
                         <span className="mb-1 block text-[10px] font-semibold uppercase tracking-wider text-primary">
                           {speaker}
@@ -216,7 +269,7 @@ export function InteractiveCallDemo() {
                       </motion.div>
                     ))
                   ) : (
-                    <div className="grid min-h-[190px] place-items-center text-center">
+                    <div className="grid min-h-47.5 place-items-center text-center">
                       <div>
                         <p className="font-medium text-white">
                           Preview an AI-handled call
@@ -232,7 +285,7 @@ export function InteractiveCallDemo() {
               </AnimatePresence>
             </div>
 
-            <div className="flex items-center justify-between gap-4 border-t border-white/[0.08] bg-white/[0.02] px-5 py-4 sm:px-6">
+            <div className="flex items-center justify-between gap-4 border-t border-white/8 bg-white/2 px-5 py-4 sm:px-6">
               <div>
                 <p className="text-[10px] uppercase tracking-wider text-slate-600">
                   Expected outcome
@@ -241,13 +294,13 @@ export function InteractiveCallDemo() {
                   {current.outcome}
                 </p>
               </div>
-              <Button
+              <RainbowButton
                 type="button"
                 onClick={() => setActive((value) => !value)}
                 className="min-w-32"
               >
                 {active ? "Reset preview" : "Start preview"}
-              </Button>
+              </RainbowButton>
             </div>
           </Card>
         </motion.div>

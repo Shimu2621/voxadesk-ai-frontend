@@ -14,6 +14,8 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { MagicCard } from "@/components/magicui/magic-card";
+import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
+import { BorderBeam } from "@/components/magicui/border-beam";
 import { SectionBadge } from "@/components/landing/section-badge";
 
 type Capability = {
@@ -79,18 +81,53 @@ const capabilities: Capability[] = [
   },
 ];
 
-function CardVisual({ type }: { type?: "conversation" | "workflow" }) {
+function CardVisual({
+  type,
+  reduceMotion,
+}: {
+  type?: "conversation" | "workflow";
+  reduceMotion: boolean | null;
+}) {
   if (type === "conversation")
     return (
       <div className="mt-8 space-y-3 rounded-xl border border-white/[0.07] bg-black/15 p-4">
-        <div className="mr-10 rounded-lg bg-white/[0.055] px-3 py-2 text-xs text-slate-400">
+        <motion.div
+          className="mr-10 rounded-lg bg-white/5.5 px-3 py-2 text-xs text-slate-400"
+          animate={
+            reduceMotion
+              ? undefined
+              : { x: [0, 3, 0], opacity: [0.72, 1, 0.72] }
+          }
+          transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
+        >
           How can I help with your appointment today?
-        </div>
-        <div className="ml-12 rounded-lg bg-primary/10 px-3 py-2 text-xs text-slate-300 ring-1 ring-primary/10">
+        </motion.div>
+        <motion.div
+          className="ml-12 rounded-lg bg-primary/10 px-3 py-2 text-xs text-slate-300 ring-1 ring-primary/10"
+          animate={
+            reduceMotion
+              ? undefined
+              : { x: [0, -3, 0], opacity: [0.72, 1, 0.72] }
+          }
+          transition={{
+            duration: 4.2,
+            delay: 0.7,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
           I need the earliest available time this week.
-        </div>
+        </motion.div>
         <div className="flex items-center gap-2 pt-1 text-[10px] uppercase tracking-wider text-primary">
-          <span className="size-1.5 rounded-full bg-primary shadow-[0_0_8px_var(--primary)]" />{" "}
+          <motion.span
+            className="size-1.5 rounded-full bg-primary shadow-[0_0_8px_var(--primary)]"
+            animate={
+              reduceMotion
+                ? undefined
+                : { opacity: [0.4, 1, 0.4], scale: [0.8, 1.2, 0.8] }
+            }
+            transition={{ duration: 2.2, repeat: Infinity }}
+          />{" "}
           Intent understood
         </div>
       </div>
@@ -98,15 +135,31 @@ function CardVisual({ type }: { type?: "conversation" | "workflow" }) {
   if (type === "workflow")
     return (
       <div className="mt-6 flex items-center justify-between gap-2 rounded-xl border border-white/[0.07] bg-black/15 p-4 text-[10px] font-medium text-slate-400 sm:text-xs">
-        <span className="rounded-lg bg-white/[0.06] px-3 py-2">Call ended</span>
-        <ArrowUpRight size={14} className="text-primary" />
+        <span className="rounded-lg bg-white/6 px-3 py-2">Call ended</span>
+        <motion.span
+          animate={
+            reduceMotion
+              ? undefined
+              : { x: [0, 4, 0], opacity: [0.45, 1, 0.45] }
+          }
+          transition={{ duration: 2.4, repeat: Infinity }}
+        >
+          <ArrowUpRight size={14} className="text-primary" />
+        </motion.span>
         <span className="rounded-lg bg-primary/10 px-3 py-2 text-primary">
           CRM updated
         </span>
-        <ArrowUpRight size={14} className="text-primary" />
-        <span className="rounded-lg bg-white/[0.06] px-3 py-2">
-          Team notified
-        </span>
+        <motion.span
+          animate={
+            reduceMotion
+              ? undefined
+              : { x: [0, 4, 0], opacity: [0.45, 1, 0.45] }
+          }
+          transition={{ duration: 2.4, delay: 0.45, repeat: Infinity }}
+        >
+          <ArrowUpRight size={14} className="text-primary" />
+        </motion.span>
+        <span className="rounded-lg bg-white/6 px-3 py-2">Team notified</span>
       </div>
     );
   return null;
@@ -116,10 +169,21 @@ export function AutomationBento() {
   const reduceMotion = useReducedMotion();
   return (
     <section
-      className="relative px-6 py-24 sm:py-28"
+      className="relative overflow-hidden px-6 py-24 sm:py-28"
       aria-labelledby="automation-heading"
     >
-      <div className="pointer-events-none absolute right-0 top-1/3 size-96 rounded-full bg-violet-500/[0.045] blur-[100px]" />
+      <AnimatedGridPattern className="text-violet-300 opacity-[0.08] mask-[radial-gradient(ellipse_at_center,black,transparent_75%)]" />
+      <div className="pointer-events-none absolute right-0 top-1/3 size-96 rounded-full bg-violet-500/4.5 blur-[100px]" />
+      <motion.div
+        className="pointer-events-none absolute -right-24 top-1/4 size-80 rounded-full bg-violet-500/7.5 blur-[105px]"
+        animate={
+          reduceMotion
+            ? undefined
+            : { x: [0, -100, 0], y: [0, 55, 0], opacity: [0.35, 0.75, 0.35] }
+        }
+        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+        aria-hidden="true"
+      />
       <div className="relative mx-auto max-w-6xl">
         <motion.div
           className="max-w-3xl"
@@ -162,20 +226,37 @@ export function AutomationBento() {
                 }}
                 whileHover={reduceMotion ? undefined : { y: -3 }}
               >
-                <MagicCard className="group h-full min-h-[220px] overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0c101b]/90 p-6">
+                <MagicCard className="group relative h-full min-h-55 overflow-hidden rounded-2xl border border-white/8 bg-[#0c101b]/90 p-6">
+                  <BorderBeam
+                    colorFrom="#c4b5fd"
+                    colorTo="#58e8c7"
+                    delay={index * 0.55}
+                    duration={7}
+                  />
                   <div className="relative z-10">
-                    <span
+                    <motion.span
                       className={`grid size-11 place-items-center rounded-xl border ${tone}`}
+                      animate={
+                        reduceMotion
+                          ? undefined
+                          : { y: [0, -3, 0], rotate: [0, 1.5, 0] }
+                      }
+                      transition={{
+                        duration: 4 + (index % 3) * 0.5,
+                        delay: index * 0.32,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
                     >
                       <Icon size={20} />
-                    </span>
+                    </motion.span>
                     <h3 className="mt-5 text-lg font-medium text-white">
                       {title}
                     </h3>
                     <p className="mt-2 text-sm leading-6 text-slate-400">
                       {copy}
                     </p>
-                    <CardVisual type={visual} />
+                    <CardVisual type={visual} reduceMotion={reduceMotion} />
                   </div>
                 </MagicCard>
               </motion.div>

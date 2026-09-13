@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Check, ChevronDown, Sparkles } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { RainbowButton } from "@/components/ui/rainbow-button";
+import { BorderBeam } from "@/components/magicui/border-beam";
 import { MagicCard } from "@/components/magicui/magic-card";
 import { SectionBadge } from "@/components/landing/section-badge";
 
@@ -79,7 +80,7 @@ export function PricingFaq() {
       className="relative overflow-hidden px-6 py-24 sm:py-28"
       aria-labelledby="pricing-heading"
     >
-      <div className="pointer-events-none absolute left-1/2 top-32 size-[560px] -translate-x-1/2 rounded-full bg-primary/[0.045] blur-[120px]" />
+      <div className="pointer-events-none absolute left-1/2 top-32 size-140 -translate-x-1/2 rounded-full bg-primary/[0.045] blur-[120px]" />
       <div className="relative mx-auto max-w-6xl">
         <motion.div
           className="mx-auto max-w-3xl text-center"
@@ -119,6 +120,12 @@ export function PricingFaq() {
               <MagicCard
                 className={`relative h-full overflow-hidden rounded-2xl border p-6 sm:p-7 ${plan.featured ? "border-primary/35 bg-primary/[0.065] shadow-[0_24px_80px_oklch(0.82_0.16_170_/_0.08)]" : "border-white/[0.08] bg-[#0b0f1a]/90"}`}
               >
+                <BorderBeam
+                  colorFrom={plan.featured ? "#58e8c7" : "#7dd3fc"}
+                  colorTo={plan.featured ? "#f9a8d4" : "#c4b5fd"}
+                  delay={index * 0.9}
+                  duration={plan.featured ? 6.5 : 8}
+                />
                 {plan.featured && (
                   <div className="absolute right-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-primary px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">
                     <Sparkles size={11} /> Recommended
@@ -161,9 +168,19 @@ export function PricingFaq() {
           ))}
         </div>
 
-        <div className="mx-auto mt-24 max-w-3xl">
+        <div className="relative mx-auto mt-24 max-w-3xl">
           <motion.div
-            className="text-center"
+            className="pointer-events-none absolute -left-28 top-24 size-64 rounded-full bg-pink-400/[0.055] blur-[90px]"
+            animate={
+              reduceMotion
+                ? undefined
+                : { x: [0, 110, 0], y: [0, 70, 0], opacity: [0.3, 0.7, 0.3] }
+            }
+            transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" }}
+            aria-hidden="true"
+          />
+          <motion.div
+            className="relative text-center"
             initial={reduceMotion ? undefined : { opacity: 0, y: 14 }}
             whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -175,53 +192,116 @@ export function PricingFaq() {
               Clear answers before you start.
             </h2>
           </motion.div>
-          <div className="mt-10 divide-y divide-white/[0.08] border-y border-white/[0.08]">
+          <motion.div
+            className="relative mt-10 space-y-3"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={{
+              hidden: {},
+              visible: {
+                transition: { staggerChildren: reduceMotion ? 0 : 0.08 },
+              },
+            }}
+          >
             {faqs.map(([question, answer], index) => {
               const expanded = open === index;
               return (
-                <div key={question}>
+                <motion.div
+                  layout
+                  key={question}
+                  variants={{
+                    hidden: { opacity: 0, y: 16, scale: 0.99 },
+                    visible: { opacity: 1, y: 0, scale: 1 },
+                  }}
+                  transition={{ duration: 0.42, ease: "easeOut" }}
+                  whileHover={reduceMotion ? undefined : { x: 4 }}
+                  className={`relative overflow-hidden rounded-2xl border transition-colors duration-300 ${expanded ? "border-primary/30 bg-primary/5.5 shadow-[0_16px_45px_oklch(0.82_0.16_170/0.06)]" : "border-white/8 bg-white/[0.022] hover:border-white/15 hover:bg-white/[0.035]"}`}
+                >
+                  {expanded && (
+                    <>
+                      <BorderBeam
+                        colorFrom="#f9a8d4"
+                        colorTo="#58e8c7"
+                        delay={index * 0.35}
+                        duration={7}
+                      />
+                      <motion.span
+                        layoutId="faq-active-glow"
+                        className="pointer-events-none absolute -right-16 -top-20 size-44 rounded-full bg-primary/8 blur-3xl"
+                      />
+                    </>
+                  )}
                   <button
                     type="button"
-                    className="flex w-full items-center justify-between gap-6 py-5 text-left text-sm font-medium text-slate-200 hover:text-white"
+                    className="relative z-10 flex w-full items-center justify-between gap-6 px-5 py-5 text-left text-sm font-medium text-slate-200 hover:text-white sm:px-6"
                     onClick={() => setOpen(expanded ? -1 : index)}
                     aria-expanded={expanded}
                   >
-                    <span>{question}</span>
+                    <span className="flex items-center gap-3">
+                      <motion.span
+                        className={`size-1.5 shrink-0 rounded-full ${expanded ? "bg-primary shadow-[0_0_10px_var(--primary)]" : "bg-slate-700"}`}
+                        animate={
+                          expanded && !reduceMotion
+                            ? {
+                                opacity: [0.45, 1, 0.45],
+                                scale: [0.8, 1.25, 0.8],
+                              }
+                            : undefined
+                        }
+                        transition={{ duration: 2, repeat: Infinity }}
+                        aria-hidden="true"
+                      />
+                      {question}
+                    </span>
                     <motion.span
-                      animate={{ rotate: expanded ? 180 : 0 }}
-                      transition={{ duration: reduceMotion ? 0 : 0.2 }}
-                      className="shrink-0 text-primary"
+                      animate={{
+                        rotate: expanded ? 180 : 0,
+                        scale: expanded ? 1.06 : 1,
+                      }}
+                      transition={{ duration: reduceMotion ? 0 : 0.25 }}
+                      className={`grid size-8 shrink-0 place-items-center rounded-full border transition-colors ${expanded ? "border-primary/25 bg-primary/10 text-primary" : "border-white/8 bg-white/2.5 text-slate-500"}`}
                     >
-                      <ChevronDown size={18} />
+                      <ChevronDown size={16} />
                     </motion.span>
                   </button>
                   <AnimatePresence initial={false}>
                     {expanded && (
                       <motion.div
                         initial={
-                          reduceMotion ? undefined : { height: 0, opacity: 0 }
+                          reduceMotion
+                            ? undefined
+                            : { height: 0, opacity: 0, filter: "blur(5px)" }
                         }
-                        animate={{ height: "auto", opacity: 1 }}
+                        animate={{
+                          height: "auto",
+                          opacity: 1,
+                          filter: "blur(0px)",
+                        }}
                         exit={
-                          reduceMotion ? undefined : { height: 0, opacity: 0 }
+                          reduceMotion
+                            ? undefined
+                            : { height: 0, opacity: 0, filter: "blur(4px)" }
                         }
-                        transition={{ duration: 0.25 }}
+                        transition={{ duration: 0.32, ease: "easeOut" }}
                         className="overflow-hidden"
                       >
-                        <p className="max-w-2xl pb-5 text-sm leading-6 text-slate-400">
-                          {answer}
-                        </p>
+                        <div className="relative z-10 mx-5 mb-5 border-l border-primary/25 pl-4 sm:mx-6">
+                          <p className="max-w-2xl text-sm leading-6 text-slate-400">
+                            {answer}
+                          </p>
+                        </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
-                </div>
+                </motion.div>
               );
             })}
-          </div>
+          </motion.div>
         </div>
 
         <motion.div
-          className="relative mt-24 overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/[0.11] via-[#0c111b] to-violet-500/[0.08] px-6 py-14 text-center sm:px-12 sm:py-16"
+          className="relative mt-24 overflow-hidden rounded-3xl border border-primary/20 bg-linear-to-br from-primary/11 via-[#0c111b] to-violet-500/8 px-6 py-14 text-center sm:px-12 sm:py-16"
           initial={
             reduceMotion ? undefined : { opacity: 0, y: 24, scale: 0.985 }
           }
@@ -231,6 +311,7 @@ export function PricingFaq() {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.65 }}
         >
+          <BorderBeam colorFrom="#58e8c7" colorTo="#f9a8d4" duration={8.5} />
           <motion.div
             className="pointer-events-none absolute left-1/2 top-1/2 size-52 -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary/15"
             animate={
