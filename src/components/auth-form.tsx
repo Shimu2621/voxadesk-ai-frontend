@@ -68,12 +68,15 @@ export function AuthForm({
     setSubmitting(true);
     setError(undefined);
     const values = Object.fromEntries(new FormData(event.currentTarget));
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 12_000);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1"}/auth/${mode}`,
         {
           method: "POST",
           credentials: "include",
+          signal: controller.signal,
           headers: { "content-type": "application/json" },
           body: JSON.stringify(values),
         },
@@ -85,9 +88,14 @@ export function AuthForm({
       router.refresh();
     } catch (cause) {
       setError(
-        cause instanceof Error ? cause.message : "Authentication failed.",
+        cause instanceof DOMException && cause.name === "AbortError"
+          ? "The server is taking too long to respond. Make sure the backend and Redis are running, then try again."
+          : cause instanceof Error
+            ? cause.message
+            : "Authentication failed.",
       );
     } finally {
+      window.clearTimeout(timeoutId);
       setSubmitting(false);
     }
   }
