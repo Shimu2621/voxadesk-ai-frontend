@@ -6,6 +6,9 @@ import {
   useGetWebhookDeliveriesQuery,
   useReplayWebhookDeliveryMutation,
 } from "@/lib/voxadesk-api";
+import { FeedbackMessage } from "@/components/feedback-message";
+import { apiErrorMessage } from "@/lib/api-error";
+import { useState } from "react";
 
 export default function OperationsPage() {
   const health = useGetOperationsHealthQuery(undefined, {
@@ -17,6 +20,22 @@ export default function OperationsPage() {
     skipPollingIfUnfocused: true,
   });
   const [replay, replayState] = useReplayWebhookDeliveryMutation();
+  const [feedback, setFeedback] = useState<{
+    message: string;
+    error?: boolean;
+  }>();
+  async function replayDelivery(id: string) {
+    setFeedback(undefined);
+    try {
+      await replay(id).unwrap();
+      setFeedback({ message: "Webhook delivery queued for replay." });
+    } catch (error) {
+      setFeedback({
+        message: apiErrorMessage(error, "Could not replay the delivery."),
+        error: true,
+      });
+    }
+  }
   if (health.isLoading) return <p>Loading operations…</p>;
   if (health.error)
     return (
@@ -28,6 +47,10 @@ export default function OperationsPage() {
     <>
       <p className="text-sm text-cyan-400">Reliability and provider state</p>
       <h1 className="mt-1 text-3xl font-bold">Operations</h1>
+      <FeedbackMessage
+        message={feedback?.message}
+        tone={feedback?.error ? "error" : "success"}
+      />
       <section className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {health.data?.data.queues.map((queue) => (
           <Card key={queue.queue}>
@@ -75,7 +98,7 @@ export default function OperationsPage() {
               {delivery.status !== "delivered" && (
                 <Button
                   disabled={replayState.isLoading}
-                  onClick={() => void replay(delivery.id)}
+                  onClick={() => void replayDelivery(delivery.id)}
                 >
                   Replay
                 </Button>

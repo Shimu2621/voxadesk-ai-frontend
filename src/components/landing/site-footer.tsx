@@ -113,9 +113,7 @@ export function SiteFooter() {
                   {column.links.map(([label, href], linkIndex) => (
                     <motion.li
                       key={label}
-                      initial={
-                        reduceMotion ? undefined : { opacity: 0, x: -8 }
-                      }
+                      initial={reduceMotion ? undefined : { opacity: 0, x: -8 }}
                       whileInView={
                         reduceMotion ? undefined : { opacity: 1, x: 0 }
                       }

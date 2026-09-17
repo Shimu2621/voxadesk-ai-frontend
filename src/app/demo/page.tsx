@@ -92,16 +92,22 @@ function DemoConsole() {
           </p>
         )}
         {mode === "text" && (
-          <form className="mt-6 flex gap-2" onSubmit={send}>
-            <input
-              name="message"
-              required
-              aria-label="Test message"
-              className="flex-1 rounded-xl border border-white/10 bg-slate-900 px-4"
-              placeholder="Ask a test question"
-            />
-            <Button>Send</Button>
-          </form>
+          <div className="mt-6">
+            <p className="rounded-lg border border-amber-400/20 bg-amber-400/10 p-3 text-left text-sm text-amber-200">
+              Text mode is a local interface simulation. Messages are not sent
+              to an AI agent and no backend response is generated.
+            </p>
+            <form className="mt-4 flex gap-2" onSubmit={send}>
+              <input
+                name="message"
+                required
+                aria-label="Test message"
+                className="flex-1 rounded-xl border border-white/10 bg-slate-900 px-4"
+                placeholder="Ask a test question"
+              />
+              <Button>Send</Button>
+            </form>
+          </div>
         )}
         <div className="mt-4 space-y-2 text-left">
           {messages.map((message, index) => (

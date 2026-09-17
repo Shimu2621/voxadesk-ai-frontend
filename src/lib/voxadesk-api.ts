@@ -87,6 +87,11 @@ export type InboxTask = {
   contact?: { name?: string | null } | null;
   notes: Array<{ id: string; body: string }>;
 };
+export type Session = {
+  user: { id: string; email: string; name?: string | null };
+  organization: Organization;
+  role: "OWNER" | "MANAGER" | "OPERATOR" | "VIEWER";
+};
 const csrfToken = () =>
   typeof document === "undefined"
     ? undefined
@@ -122,6 +127,39 @@ export const voxadeskApi = createApi({
     "Operations",
   ],
   endpoints: (builder) => ({
+    getSession: builder.query<{ data: Session }, void>({
+      query: () => "/auth/me",
+    }),
+    logout: builder.mutation<void, void>({
+      query: () => ({ url: "/auth/logout", method: "POST" }),
+    }),
+    verifyEmail: builder.mutation<void, string>({
+      query: (token) => ({
+        url: "/auth/verify-email",
+        method: "POST",
+        body: { token },
+      }),
+    }),
+    forgotPassword: builder.mutation<{ message: string }, string>({
+      query: (email) => ({
+        url: "/auth/forgot-password",
+        method: "POST",
+        body: { email },
+      }),
+    }),
+    resetPassword: builder.mutation<void, { token: string; password: string }>({
+      query: (body) => ({ url: "/auth/reset-password", method: "POST", body }),
+    }),
+    acceptInvitation: builder.mutation<
+      { data: { organizationId: string; requiresLogin: boolean } },
+      { token: string; name?: string; password?: string }
+    >({
+      query: (body) => ({
+        url: "/auth/accept-invitation",
+        method: "POST",
+        body,
+      }),
+    }),
     getDashboard: builder.query<DashboardSummary, void>({
       query: () => "/dashboard",
       providesTags: ["Dashboard"],
@@ -323,6 +361,12 @@ export const voxadeskApi = createApi({
 });
 
 export const {
+  useGetSessionQuery,
+  useLogoutMutation,
+  useVerifyEmailMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
+  useAcceptInvitationMutation,
   useGetDashboardQuery,
   useGetAnalyticsQuery,
   useGetOrganizationQuery,

@@ -142,10 +142,18 @@ export function InteractiveCallDemo() {
               className="pointer-events-none absolute -right-24 top-10 size-64 rounded-full bg-primary/[0.07] blur-[80px]"
               animate={
                 active && !reduceMotion
-                  ? { x: [0, -90, 0], y: [0, 120, 0], opacity: [0.3, 0.75, 0.3] }
+                  ? {
+                      x: [0, -90, 0],
+                      y: [0, 120, 0],
+                      opacity: [0.3, 0.75, 0.3],
+                    }
                   : { opacity: 0.25 }
               }
-              transition={{ duration: 8, repeat: active ? Infinity : 0, ease: "easeInOut" }}
+              transition={{
+                duration: 8,
+                repeat: active ? Infinity : 0,
+                ease: "easeInOut",
+              }}
               aria-hidden="true"
             />
             <div className="flex items-center justify-between border-b border-white/8 px-5 py-4 sm:px-6">
@@ -154,7 +162,14 @@ export function InteractiveCallDemo() {
                   className="relative flex size-9 items-center justify-center rounded-full bg-primary/10 text-primary ring-1 ring-primary/25"
                   animate={
                     active && !reduceMotion
-                      ? { scale: [1, 1.07, 1], boxShadow: ["0 0 0px transparent", "0 0 22px oklch(0.82 0.16 170 / 0.22)", "0 0 0px transparent"] }
+                      ? {
+                          scale: [1, 1.07, 1],
+                          boxShadow: [
+                            "0 0 0px transparent",
+                            "0 0 22px oklch(0.82 0.16 170 / 0.22)",
+                            "0 0 0px transparent",
+                          ],
+                        }
                       : undefined
                   }
                   transition={{ duration: 2.4, repeat: Infinity }}
@@ -163,7 +178,11 @@ export function InteractiveCallDemo() {
                   {active && (
                     <motion.span
                       className="absolute -right-0.5 -top-0.5 size-2.5 rounded-full bg-primary ring-2 ring-[#0b0e19]"
-                      animate={reduceMotion ? undefined : { opacity: [0.4, 1, 0.4], scale: [0.8, 1.2, 0.8] }}
+                      animate={
+                        reduceMotion
+                          ? undefined
+                          : { opacity: [0.4, 1, 0.4], scale: [0.8, 1.2, 0.8] }
+                      }
                       transition={{ duration: 1.5, repeat: Infinity }}
                     />
                   )}
@@ -181,7 +200,13 @@ export function InteractiveCallDemo() {
                 className="rounded-full border border-white/8 bg-white/4 px-3 py-1.5 text-[11px] font-medium text-slate-400"
                 animate={
                   active && !reduceMotion
-                    ? { borderColor: ["rgba(255,255,255,.08)", "rgba(88,232,199,.4)", "rgba(255,255,255,.08)"] }
+                    ? {
+                        borderColor: [
+                          "rgba(255,255,255,.08)",
+                          "rgba(88,232,199,.4)",
+                          "rgba(255,255,255,.08)",
+                        ],
+                      }
                     : undefined
                 }
                 transition={{ duration: 2.8, repeat: Infinity }}
@@ -217,7 +242,13 @@ export function InteractiveCallDemo() {
                 className="mb-6 flex h-12 items-center justify-center gap-1 rounded-xl border border-white/[0.07] bg-white/2.5 px-5"
                 animate={
                   active && !reduceMotion
-                    ? { boxShadow: ["inset 0 0 0px transparent", "inset 0 0 24px oklch(0.82 0.16 170 / 0.08)", "inset 0 0 0px transparent"] }
+                    ? {
+                        boxShadow: [
+                          "inset 0 0 0px transparent",
+                          "inset 0 0 24px oklch(0.82 0.16 170 / 0.08)",
+                          "inset 0 0 0px transparent",
+                        ],
+                      }
                     : undefined
                 }
                 transition={{ duration: 3, repeat: Infinity }}

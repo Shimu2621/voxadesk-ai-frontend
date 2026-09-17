@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react";
 import {
   AnimatePresence,
   motion,
   useReducedMotion,
   type MotionProps,
-} from "motion/react"
+} from "motion/react";
 
-import { cn } from "@/lib/utils"
-import { AuroraText } from "@/components/ui/aurora-text"
+import { cn } from "@/lib/utils";
+import { AuroraText } from "@/components/ui/aurora-text";
 
 interface WordRotateProps {
-  words: string[]
-  duration?: number
-  motionProps?: MotionProps
-  className?: string
-  aurora?: boolean
+  words: string[];
+  duration?: number;
+  motionProps?: MotionProps;
+  className?: string;
+  aurora?: boolean;
 }
 
 export function WordRotate({
@@ -31,25 +31,29 @@ export function WordRotate({
   className,
   aurora = false,
 }: WordRotateProps) {
-  const [index, setIndex] = useState(0)
-  const shouldReduceMotion = useReducedMotion()
+  const [index, setIndex] = useState(0);
+  const shouldReduceMotion = useReducedMotion();
   const widestWord = useMemo(
-    () => words.reduce((longest, word) => (word.length > longest.length ? word : longest), ""),
+    () =>
+      words.reduce(
+        (longest, word) => (word.length > longest.length ? word : longest),
+        "",
+      ),
     [words],
-  )
+  );
 
   useEffect(() => {
-    if (shouldReduceMotion || words.length < 2) return
+    if (shouldReduceMotion || words.length < 2) return;
 
     const interval = setInterval(() => {
-      setIndex((prevIndex) => (prevIndex + 1) % words.length)
-    }, duration)
+      setIndex((prevIndex) => (prevIndex + 1) % words.length);
+    }, duration);
 
     // Clean up interval on unmount
-    return () => clearInterval(interval)
-  }, [words, duration, shouldReduceMotion])
+    return () => clearInterval(interval);
+  }, [words, duration, shouldReduceMotion]);
 
-  if (words.length === 0) return null
+  if (words.length === 0) return null;
 
   return (
     <span
@@ -58,7 +62,10 @@ export function WordRotate({
         className,
       )}
     >
-      <span className="invisible col-start-1 row-start-1 whitespace-nowrap" aria-hidden="true">
+      <span
+        className="invisible col-start-1 row-start-1 whitespace-nowrap"
+        aria-hidden="true"
+      >
         {widestWord}
       </span>
       <AnimatePresence mode="wait">
@@ -71,5 +78,5 @@ export function WordRotate({
         </motion.span>
       </AnimatePresence>
     </span>
-  )
+  );
 }

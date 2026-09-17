@@ -8,6 +8,9 @@ import {
 } from "@/lib/voxadesk-api";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { FeedbackMessage } from "@/components/feedback-message";
+import { apiErrorMessage } from "@/lib/api-error";
+import { useState } from "react";
 export default function Page() {
   const { data, isLoading, error } = useGetKnowledgeQuery(undefined, {
     pollingInterval: 5_000,
@@ -16,16 +19,46 @@ export default function Page() {
   const [create, creating] = useCreateKnowledgeMutation();
   const [sync] = useSyncKnowledgeMutation();
   const [archive] = useArchiveKnowledgeMutation();
+  const [feedback, setFeedback] = useState<{
+    message: string;
+    error?: boolean;
+  }>();
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
     const values = Object.fromEntries(new FormData(form));
-    await create({
-      type: "TEXT",
-      name: String(values.name),
-      content: String(values.content),
-    }).unwrap();
-    form.reset();
+    setFeedback(undefined);
+    try {
+      await create({
+        type: "TEXT",
+        name: String(values.name),
+        content: String(values.content),
+      }).unwrap();
+      form.reset();
+      setFeedback({
+        message: "Knowledge source added and queued for processing.",
+      });
+    } catch (error) {
+      setFeedback({
+        message: apiErrorMessage(error, "Could not add the source."),
+        error: true,
+      });
+    }
+  }
+  async function runAction(action: "sync" | "archive", id: string) {
+    setFeedback(undefined);
+    try {
+      await (action === "sync" ? sync(id) : archive(id)).unwrap();
+      setFeedback({
+        message:
+          action === "sync" ? "Source queued for retry." : "Source archived.",
+      });
+    } catch (error) {
+      setFeedback({
+        message: apiErrorMessage(error, `Could not ${action} the source.`),
+        error: true,
+      });
+    }
   }
   return (
     <>
@@ -34,6 +67,10 @@ export default function Page() {
       <p className="mt-2 text-slate-400">
         Only reviewed, tenant-owned sources are available to agents.
       </p>
+      <FeedbackMessage
+        message={feedback?.message}
+        tone={feedback?.error ? "error" : "success"}
+      />
       <div className="mt-8 grid gap-5 lg:grid-cols-[1fr_1.4fr]">
         <Card>
           <h2 className="font-bold">Add manual text</h2>
@@ -77,12 +114,14 @@ export default function Page() {
                   </div>
                   <div className="flex gap-2">
                     {source.status === "failed" && (
-                      <Button onClick={() => void sync(source.id)}>
+                      <Button onClick={() => void runAction("sync", source.id)}>
                         Retry
                       </Button>
                     )}
                     {source.status !== "archived" && (
-                      <Button onClick={() => void archive(source.id)}>
+                      <Button
+                        onClick={() => void runAction("archive", source.id)}
+                      >
                         Archive
                       </Button>
                     )}

@@ -406,10 +406,11 @@ export default function DashboardPage() {
                   className="border-primary/20 bg-primary/10 text-primary"
                   delay={0.05}
                 >
-                  Conversation activity
+                  Illustrative conversation activity
                 </DashboardBadge>
                 <p className="mt-2 text-xs text-slate-500">
-                  Operational trend based on current volume
+                  The chart shape is illustrative; headline totals use live
+                  workspace data.
                 </p>
               </div>
               <div className="flex rounded-xl border border-white/[0.07] bg-black/20 p-1">

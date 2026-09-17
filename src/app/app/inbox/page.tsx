@@ -2,13 +2,36 @@
 import { useGetInboxQuery, useUpdateInboxMutation } from "@/lib/voxadesk-api";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { FeedbackMessage } from "@/components/feedback-message";
+import { apiErrorMessage } from "@/lib/api-error";
+import { useState } from "react";
 export default function Page() {
   const { data, isLoading, error } = useGetInboxQuery();
   const [update, state] = useUpdateInboxMutation();
+  const [feedback, setFeedback] = useState<{
+    message: string;
+    error?: boolean;
+  }>();
+  async function resolve(id: string) {
+    setFeedback(undefined);
+    try {
+      await update({ id, status: "RESOLVED" }).unwrap();
+      setFeedback({ message: "Follow-up marked as resolved." });
+    } catch (error) {
+      setFeedback({
+        message: apiErrorMessage(error, "Could not resolve the follow-up."),
+        error: true,
+      });
+    }
+  }
   return (
     <>
       <p className="text-sm text-cyan-400">Follow-up queue</p>
       <h1 className="mt-1 text-3xl font-bold">Operator inbox</h1>
+      <FeedbackMessage
+        message={feedback?.message}
+        tone={feedback?.error ? "error" : "success"}
+      />
       <Card className="mt-8">
         {isLoading && <p>Loading…</p>}
         {error && <p className="text-red-300">Inbox could not be loaded.</p>}
@@ -32,9 +55,7 @@ export default function Page() {
               {task.status !== "RESOLVED" && (
                 <Button
                   disabled={state.isLoading}
-                  onClick={() =>
-                    void update({ id: task.id, status: "RESOLVED" })
-                  }
+                  onClick={() => void resolve(task.id)}
                 >
                   Resolve
                 </Button>

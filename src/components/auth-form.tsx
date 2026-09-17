@@ -1,6 +1,7 @@
 "use client";
 
 import type { FormEvent, ReactNode } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
 import {
@@ -84,7 +85,7 @@ export function AuthForm({
       const payload = (await response.json()) as AuthResponse;
       if (!response.ok)
         throw new Error(payload.message ?? "Authentication failed.");
-      router.push("/app");
+      router.push(signup ? "/verify-email" : "/app");
       router.refresh();
     } catch (cause) {
       setError(
@@ -250,6 +251,14 @@ export function AuthForm({
                     <span className="google-g text-base font-black">G</span>{" "}
                     Google
                   </Button>
+                  {!signup && (
+                    <Link
+                      className="block text-sm text-cyan-400 hover:underline"
+                      href="/forgot-password"
+                    >
+                      Forgot your password?
+                    </Link>
+                  )}
                   <Button
                     className="social-button"
                     variant="outline"

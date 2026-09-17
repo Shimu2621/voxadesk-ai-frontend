@@ -35,20 +35,20 @@
   --font-display: var(--font-space-grotesk);
   --animate-aurora: aurora 8s ease-in-out infinite alternate;
   @keyframes aurora {
-  0% {
-    background-position: 0% 50%;
+    0% {
+      background-position: 0% 50%;
     }
-  25% {
-    background-position: 50% 100%;
+    25% {
+      background-position: 50% 100%;
     }
-  50% {
-    background-position: 100% 50%;
+    50% {
+      background-position: 100% 50%;
     }
-  75% {
-    background-position: 50% 0%;
+    75% {
+      background-position: 50% 0%;
     }
-  100% {
-    background-position: 0% 50%;
+    100% {
+      background-position: 0% 50%;
     }
   }
 }
@@ -453,7 +453,9 @@ body {
     var(--beam-color-to) 326deg,
     transparent 360deg
   );
-  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--beam-color-from) 55%, transparent));
+  filter: drop-shadow(
+    0 0 5px color-mix(in srgb, var(--beam-color-from) 55%, transparent)
+  );
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);

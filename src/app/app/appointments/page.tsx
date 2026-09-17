@@ -5,13 +5,36 @@ import {
 } from "@/lib/voxadesk-api";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { FeedbackMessage } from "@/components/feedback-message";
+import { apiErrorMessage } from "@/lib/api-error";
+import { useState } from "react";
 export default function Page() {
   const { data, isLoading, error } = useGetAppointmentsQuery();
   const [update, state] = useUpdateAppointmentMutation();
+  const [feedback, setFeedback] = useState<{
+    message: string;
+    error?: boolean;
+  }>();
+  async function cancel(id: string) {
+    setFeedback(undefined);
+    try {
+      await update({ id, status: "CANCELLED" }).unwrap();
+      setFeedback({ message: "Appointment cancelled." });
+    } catch (error) {
+      setFeedback({
+        message: apiErrorMessage(error, "Could not cancel the appointment."),
+        error: true,
+      });
+    }
+  }
   return (
     <>
       <p className="text-sm text-cyan-400">Calendar operations</p>
       <h1 className="mt-1 text-3xl font-bold">Appointments</h1>
+      <FeedbackMessage
+        message={feedback?.message}
+        tone={feedback?.error ? "error" : "success"}
+      />
       <Card className="mt-8">
         {isLoading && <p>Loading…</p>}
         {error && (
@@ -35,9 +58,7 @@ export default function Page() {
               {item.status === "CONFIRMED" && (
                 <Button
                   disabled={state.isLoading}
-                  onClick={() =>
-                    void update({ id: item.id, status: "CANCELLED" })
-                  }
+                  onClick={() => void cancel(item.id)}
                 >
                   Cancel
                 </Button>

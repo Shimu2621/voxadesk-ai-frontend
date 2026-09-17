@@ -21,11 +21,7 @@ export function SectionBadge({
   return (
     <span
       id={id}
-      className={cn(
-        "section-badge",
-        `section-badge-${tone}`,
-        className,
-      )}
+      className={cn("section-badge", `section-badge-${tone}`, className)}
     >
       <Icon className="relative z-10 size-3.5" aria-hidden="true" />
       <span className="relative z-10">{children}</span>

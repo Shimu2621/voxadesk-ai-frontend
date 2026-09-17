@@ -38,7 +38,7 @@ describe("AuthForm", () => {
     });
     fireEvent.click(screen.getByRole("button", { name: "Create account" }));
     await waitFor(() => expect(request).toHaveBeenCalledOnce());
-    expect(push).toHaveBeenCalledWith("/app");
+    expect(push).toHaveBeenCalledWith("/verify-email");
   });
 
   it("shows a safe API error", async () => {

@@ -17,11 +17,19 @@ export function Marquee({
         className,
       )}
     >
-      <div className={cn("magic-marquee-track", reverse && "magic-marquee-track-reverse")}>
+      <div
+        className={cn(
+          "magic-marquee-track",
+          reverse && "magic-marquee-track-reverse",
+        )}
+      >
         {children}
       </div>
       <div
-        className={cn("magic-marquee-track", reverse && "magic-marquee-track-reverse")}
+        className={cn(
+          "magic-marquee-track",
+          reverse && "magic-marquee-track-reverse",
+        )}
         aria-hidden="true"
       >
         {children}
