@@ -30,6 +30,7 @@ export type Organization = {
   website?: string | null;
   onboardingStep: number;
   onboardingCompletedAt?: string | null;
+  locations?: Location[];
 };
 export type Agent = {
   id: string;
@@ -37,6 +38,71 @@ export type Agent = {
   status: "DRAFT" | "PUBLISHED" | "ARCHIVED";
   draftConfig: Record<string, unknown>;
   activeVersion?: { id: string; version: number } | null;
+};
+export type AgentConfig = {
+  name: string;
+  greeting: string;
+  voiceId: string;
+  timezone: string;
+  languages: string[];
+  tone: string;
+  role: string;
+  pace: number;
+  interruptible: boolean;
+  pronunciation: Array<{ phrase: string; pronunciation: string }>;
+  disclosure: string;
+  transferNumbers: string[];
+  channels: { phone: boolean; webVoice: boolean; webText: boolean };
+  promptSections: {
+    objectives: string;
+    workflow: string;
+    safety: string;
+    prohibitedActions: string;
+  };
+  unknownFallback: string;
+};
+export type AgentDetail = Omit<Agent, "draftConfig"> & {
+  draftConfig: AgentConfig;
+  versions: Array<{
+    id: string;
+    version: number;
+    config: AgentConfig & { providerAgentId?: string };
+    publishedAt: string;
+  }>;
+};
+export type Hours = Record<
+  | "monday"
+  | "tuesday"
+  | "wednesday"
+  | "thursday"
+  | "friday"
+  | "saturday"
+  | "sunday",
+  Array<{ open: string; close: string }>
+>;
+export type Location = {
+  id: string;
+  name: string;
+  timezone: string;
+  phone?: string | null;
+  hoursJson: Hours;
+  closuresJson: Array<{ date: string; label?: string }>;
+};
+export type Service = {
+  id: string;
+  name: string;
+  description?: string | null;
+  durationMinutes: number;
+  bufferMinutes: number;
+  priceLabel?: string | null;
+  bookingRulesJson?: { horizonDays: number; minimumNoticeHours: number } | null;
+  active: boolean;
+};
+export type Faq = {
+  id: string;
+  question: string;
+  answer: string;
+  active: boolean;
 };
 export type KnowledgeSource = {
   id: string;
@@ -54,7 +120,8 @@ export type Conversation = {
   summary?: string | null;
   durationSeconds?: number | null;
   createdAt: string;
-  agent: { name: string };
+  agent?: { name: string };
+  contact?: { name?: string | null } | null;
   messages?: Array<{
     id: string;
     role: string;
@@ -125,6 +192,9 @@ export const voxadeskApi = createApi({
     "Team",
     "Billing",
     "Operations",
+    "Location",
+    "Service",
+    "Faq",
   ],
   endpoints: (builder) => ({
     getSession: builder.query<{ data: Session }, void>({
@@ -183,6 +253,44 @@ export const voxadeskApi = createApi({
       query: () => "/agents",
       providesTags: ["Agent"],
     }),
+    getAgent: builder.query<{ data: AgentDetail }, string>({
+      query: (id) => `/agents/${id}`,
+      providesTags: (_result, _error, id) => [{ type: "Agent", id }],
+    }),
+    updateAgent: builder.mutation<
+      { data: Agent },
+      { id: string; config: AgentConfig }
+    >({
+      query: ({ id, config }) => ({
+        url: `/agents/${id}`,
+        method: "PATCH",
+        body: config,
+      }),
+      invalidatesTags: (_result, _error, { id }) => [
+        "Agent",
+        { type: "Agent", id },
+      ],
+    }),
+    duplicateAgent: builder.mutation<{ data: Agent }, string>({
+      query: (id) => ({ url: `/agents/${id}/duplicate`, method: "POST" }),
+      invalidatesTags: ["Agent"],
+    }),
+    archiveAgent: builder.mutation<{ data: Agent }, string>({
+      query: (id) => ({ url: `/agents/${id}/archive`, method: "POST" }),
+      invalidatesTags: ["Agent"],
+    }),
+    rollbackAgent: builder.mutation<unknown, { id: string; versionId: string }>(
+      {
+        query: ({ id, versionId }) => ({
+          url: `/agents/${id}/rollback/${versionId}`,
+          method: "POST",
+        }),
+        invalidatesTags: (_result, _error, { id }) => [
+          "Agent",
+          { type: "Agent", id },
+        ],
+      },
+    ),
     createAgent: builder.mutation<{ data: Agent }, Record<string, unknown>>({
       query: (body) => ({ url: "/agents", method: "POST", body }),
       invalidatesTags: ["Agent"],
@@ -218,8 +326,14 @@ export const voxadeskApi = createApi({
     }),
     getConversations: builder.query<
       { data: Conversation[]; nextCursor?: string | null },
-      void
-    >({ query: () => "/conversations", providesTags: ["Conversation"] }),
+      { cursor?: string; limit?: number } | void
+    >({
+      query: (params) => ({
+        url: "/conversations",
+        params: params || { limit: 10 },
+      }),
+      providesTags: ["Conversation"],
+    }),
     getConversation: builder.query<
       { data: Conversation; appointments: Appointment[] },
       string
@@ -242,8 +356,11 @@ export const voxadeskApi = createApi({
       }),
       invalidatesTags: ["Appointment"],
     }),
-    getInbox: builder.query<{ data: InboxTask[] }, void>({
-      query: () => "/inbox",
+    getInbox: builder.query<
+      { data: InboxTask[]; nextCursor?: string | null },
+      { cursor?: string; limit?: number } | void
+    >({
+      query: (params) => ({ url: "/inbox", params: params || { limit: 10 } }),
       providesTags: ["Inbox"],
     }),
     updateInbox: builder.mutation<unknown, { id: string; status: string }>({
@@ -278,7 +395,7 @@ export const voxadeskApi = createApi({
           members: Array<{
             id: string;
             role: string;
-            user: { name?: string | null; email: string };
+            user: { id: string; name?: string | null; email: string };
           }>;
           invitations: Array<{
             id: string;
@@ -293,6 +410,82 @@ export const voxadeskApi = createApi({
     inviteMember: builder.mutation<unknown, { email: string; role: string }>({
       query: (body) => ({ url: "/invitations", method: "POST", body }),
       invalidatesTags: ["Team"],
+    }),
+    cancelInvitation: builder.mutation<void, string>({
+      query: (id) => ({ url: `/invitations/${id}`, method: "DELETE" }),
+      invalidatesTags: ["Team"],
+    }),
+    updateMemberRole: builder.mutation<unknown, { id: string; role: string }>({
+      query: ({ id, role }) => ({
+        url: `/members/${id}`,
+        method: "PATCH",
+        body: { role },
+      }),
+      invalidatesTags: ["Team"],
+    }),
+    removeMember: builder.mutation<void, string>({
+      query: (id) => ({ url: `/members/${id}`, method: "DELETE" }),
+      invalidatesTags: ["Team"],
+    }),
+    createBillingPortal: builder.mutation<{ data: { url: string } }, void>({
+      query: () => ({
+        url: "/billing/portal",
+        method: "POST",
+        body: { returnUrl: `${window.location.origin}/app/settings` },
+      }),
+    }),
+    createLocation: builder.mutation<{ data: Location }, Omit<Location, "id">>({
+      query: (body) => ({ url: "/locations", method: "POST", body }),
+      invalidatesTags: ["Organization", "Location"],
+    }),
+    updateLocation: builder.mutation<
+      { data: Location },
+      { id: string; body: Omit<Location, "id"> }
+    >({
+      query: ({ id, body }) => ({
+        url: `/locations/${id}`,
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: ["Organization", "Location"],
+    }),
+    getServices: builder.query<{ data: Service[] }, void>({
+      query: () => "/services",
+      providesTags: ["Service"],
+    }),
+    saveService: builder.mutation<
+      { data: Service },
+      { id?: string; body: Omit<Service, "id"> }
+    >({
+      query: ({ id, body }) => ({
+        url: id ? `/services/${id}` : "/services",
+        method: id ? "PATCH" : "POST",
+        body,
+      }),
+      invalidatesTags: ["Service"],
+    }),
+    deleteService: builder.mutation<void, string>({
+      query: (id) => ({ url: `/services/${id}`, method: "DELETE" }),
+      invalidatesTags: ["Service"],
+    }),
+    getFaqs: builder.query<{ data: Faq[] }, void>({
+      query: () => "/faqs",
+      providesTags: ["Faq"],
+    }),
+    saveFaq: builder.mutation<
+      { data: Faq },
+      { id?: string; body: Omit<Faq, "id"> }
+    >({
+      query: ({ id, body }) => ({
+        url: id ? `/faqs/${id}` : "/faqs",
+        method: id ? "PATCH" : "POST",
+        body,
+      }),
+      invalidatesTags: ["Faq"],
+    }),
+    deleteFaq: builder.mutation<void, string>({
+      query: (id) => ({ url: `/faqs/${id}`, method: "DELETE" }),
+      invalidatesTags: ["Faq"],
     }),
     getBilling: builder.query<
       {
@@ -372,6 +565,11 @@ export const {
   useGetOrganizationQuery,
   useUpdateOrganizationMutation,
   useGetAgentsQuery,
+  useGetAgentQuery,
+  useUpdateAgentMutation,
+  useDuplicateAgentMutation,
+  useArchiveAgentMutation,
+  useRollbackAgentMutation,
   useCreateAgentMutation,
   usePublishAgentMutation,
   useCreateSignedSessionMutation,
@@ -389,6 +587,18 @@ export const {
   useConnectIntegrationMutation,
   useGetTeamQuery,
   useInviteMemberMutation,
+  useCancelInvitationMutation,
+  useUpdateMemberRoleMutation,
+  useRemoveMemberMutation,
+  useCreateBillingPortalMutation,
+  useCreateLocationMutation,
+  useUpdateLocationMutation,
+  useGetServicesQuery,
+  useSaveServiceMutation,
+  useDeleteServiceMutation,
+  useGetFaqsQuery,
+  useSaveFaqMutation,
+  useDeleteFaqMutation,
   useGetBillingQuery,
   useCreateCheckoutMutation,
   useGetOperationsHealthQuery,

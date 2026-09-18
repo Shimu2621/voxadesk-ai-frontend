@@ -600,6 +600,43 @@ body {
   box-shadow: none;
 }
 
+.rainbow-button-secondary {
+  background:
+    linear-gradient(rgb(255 255 255 / 0.07), rgb(255 255 255 / 0.07))
+      padding-box,
+    linear-gradient(90deg, #58e8c7, #22d3ee, #3b82f6, #f9a8d4, #58e8c7)
+      border-box;
+  background-size:
+    100% 100%,
+    200% 100%;
+  color: #f8fafc;
+  box-shadow: 0 8px 24px rgb(34 211 238 / 0.08);
+}
+
+.rainbow-button-ghost {
+  background:
+    linear-gradient(#080d17, #080d17) padding-box,
+    linear-gradient(90deg, #58e8c7, #22d3ee, #3b82f6, #f9a8d4, #58e8c7)
+      border-box;
+  background-size:
+    100% 100%,
+    200% 100%;
+  color: #cbd5e1;
+  box-shadow: none;
+}
+
+.rainbow-button-destructive {
+  background:
+    linear-gradient(rgb(69 10 10 / 0.88), rgb(69 10 10 / 0.88)) padding-box,
+    linear-gradient(90deg, #fb7185, #f97316, #f9a8d4, #ef4444, #fb7185)
+      border-box;
+  background-size:
+    100% 100%,
+    200% 100%;
+  color: #fecaca;
+  box-shadow: 0 8px 24px rgb(248 113 113 / 0.1);
+}
+
 .rainbow-button:hover:not(:disabled) {
   transform: translateY(-1px);
   filter: brightness(1.06);
@@ -808,4 +845,91 @@ body {
 ::selection {
   background: var(--primary);
   color: #020617;
+}
+
+.dashboard-main :where(input, textarea, select) {
+  outline: none;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
+}
+
+.dashboard-main :where(input, textarea, select) {
+  min-height: 2.75rem;
+  border-radius: 0.75rem;
+  border-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(9, 14, 25, 0.9);
+  color: #f8fafc;
+}
+
+.dashboard-main textarea {
+  resize: vertical;
+}
+
+.dashboard-main :where(label, legend) {
+  color: #cbd5e1;
+  font-weight: 500;
+}
+
+.dashboard-main > div > :is(p:first-child) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.dashboard-main > div > :is(p:first-child)::before {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--primary);
+  box-shadow: 0 0 14px oklch(0.82 0.16 170 / 0.6);
+  content: "";
+}
+
+.dashboard-main > div > p:first-child + h1 {
+  margin-top: 0.75rem;
+  color: #fff;
+  font-size: clamp(1.875rem, 3vw, 2.25rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+}
+
+.dashboard-main :where(input, textarea, select):hover {
+  border-color: rgba(255, 255, 255, 0.17);
+}
+
+.dashboard-main :where(input, textarea, select):focus-visible {
+  border-color: oklch(0.82 0.16 170 / 0.75);
+  box-shadow: 0 0 0 3px oklch(0.82 0.16 170 / 0.1);
+}
+
+.dashboard-card,
+.dashboard-row {
+  transition:
+    border-color 200ms ease,
+    background-color 200ms ease,
+    transform 200ms ease;
+}
+
+.dashboard-card:hover {
+  border-color: oklch(0.82 0.16 170 / 0.17);
+}
+
+.dashboard-row:hover {
+  border-color: oklch(0.82 0.16 170 / 0.18);
+  background-color: rgba(255, 255, 255, 0.055);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-card,
+  .dashboard-row,
+  .dashboard-main :where(input, textarea, select) {
+    transition: none;
+  }
 }

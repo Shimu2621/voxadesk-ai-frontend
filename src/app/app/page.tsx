@@ -82,16 +82,16 @@ const teamAvatars = [
 function DashboardSkeleton() {
   return (
     <div className="space-y-7" aria-label="Loading dashboard" role="status">
-      <div className="h-24 animate-pulse rounded-2xl bg-white/[0.04]" />
+      <div className="h-24 animate-pulse rounded-2xl bg-white/4" />
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {Array.from({ length: 4 }, (_, index) => (
           <div
             key={index}
-            className="h-36 animate-pulse rounded-2xl bg-white/[0.04]"
+            className="h-36 animate-pulse rounded-2xl bg-white/4"
           />
         ))}
       </div>
-      <div className="h-96 animate-pulse rounded-2xl bg-white/[0.04]" />
+      <div className="h-96 animate-pulse rounded-2xl bg-white/4" />
     </div>
   );
 }
@@ -111,7 +111,7 @@ function DashboardBadge({
 
   return (
     <motion.span
-      className={`group/badge relative inline-flex items-center gap-2 overflow-hidden rounded-full border px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.1em] ${className}`}
+      className={`group/badge relative inline-flex items-center gap-2 overflow-hidden rounded-full border px-3 py-1.5 text-[10px] font-semibold uppercase tracking-widest ${className}`}
       initial={reduceMotion ? undefined : { opacity: 0, scale: 0.92, y: 4 }}
       whileInView={reduceMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
       viewport={{ once: true }}
@@ -157,7 +157,7 @@ export default function DashboardPage() {
   if (isLoading) return <DashboardSkeleton />;
   if (error || !data)
     return (
-      <Card className="mx-auto mt-20 max-w-lg border-red-400/20 bg-red-400/[0.05] text-center">
+      <Card className="mx-auto mt-20 max-w-lg border-red-400/20 bg-red-400/5 text-center">
         <div className="mx-auto grid size-12 place-items-center rounded-2xl bg-red-400/10 text-red-300">
           <Zap size={20} />
         </div>
@@ -298,7 +298,7 @@ export default function DashboardPage() {
 
   return (
     <div className="relative mx-auto max-w-7xl pb-10">
-      <div className="pointer-events-none absolute -right-24 -top-20 size-80 rounded-full bg-primary/[0.045] blur-[110px]" />
+      <div className="pointer-events-none absolute -right-24 -top-20 size-80 rounded-full bg-primary/4.5 blur-[110px]" />
 
       <motion.header
         className="relative flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between"
@@ -397,7 +397,7 @@ export default function DashboardPage() {
           animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.2 }}
         >
-          <MagicCard className="relative h-full overflow-hidden rounded-2xl border border-white/[0.09] bg-[#090e19]/95 p-5 sm:p-6">
+          <MagicCard className="relative h-full overflow-hidden rounded-2xl border border-white/9 bg-[#090e19]/95 p-5 sm:p-6">
             <BorderBeam duration={9} colorFrom="#58e8c7" colorTo="#38bdf8" />
             <div className="relative z-10 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div>
@@ -439,11 +439,11 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            <div className="relative z-10 mt-8 flex h-64 items-end gap-2 rounded-xl border border-white/[0.06] bg-black/15 px-4 pb-4 pt-8 sm:gap-3 sm:px-6">
+            <div className="relative z-10 mt-8 flex h-64 items-end gap-2 rounded-xl border border-white/6 bg-black/15 px-4 pb-4 pt-8 sm:gap-3 sm:px-6">
               {[25, 50, 75].map((top) => (
                 <div
                   key={top}
-                  className="pointer-events-none absolute inset-x-4 border-t border-dashed border-white/[0.05]"
+                  className="pointer-events-none absolute inset-x-4 border-t border-dashed border-white/5"
                   style={{ top: `${top}%` }}
                 />
               ))}
@@ -459,7 +459,7 @@ export default function DashboardPage() {
                     onMouseLeave={() => setActiveBar(null)}
                     onFocus={() => setActiveBar(index)}
                     onBlur={() => setActiveBar(null)}
-                    className="relative w-full overflow-hidden rounded-t-md bg-linear-to-t from-primary/20 via-primary/55 to-cyan-300 shadow-[0_-5px_20px_oklch(0.82_0.16_170_/_0.08)]"
+                    className="relative w-full overflow-hidden rounded-t-md bg-linear-to-t from-primary/20 via-primary/55 to-cyan-300 shadow-[0_-5px_20px_oklch(0.82_0.16_170/0.08)]"
                     initial={{ height: reduceMotion ? `${height}%` : 0 }}
                     animate={{ height: `${height}%` }}
                     transition={{
@@ -508,7 +508,7 @@ export default function DashboardPage() {
         >
           <Card className="relative h-full overflow-hidden border-amber-400/15 bg-[#090e19]/95 p-5 shadow-[18px_-18px_70px_rgba(251,191,36,0.035)] sm:p-6">
             <div
-              className="pointer-events-none absolute -right-16 -top-16 size-40 rounded-full bg-amber-400/[0.075] blur-3xl"
+              className="pointer-events-none absolute -right-16 -top-16 size-40 rounded-full bg-amber-400/7.5 blur-3xl"
               aria-hidden="true"
             />
             <div className="flex items-center justify-between">
@@ -539,7 +539,7 @@ export default function DashboardPage() {
                   >
                     <Link
                       href={href}
-                      className={`group relative flex items-center gap-3 overflow-hidden rounded-xl border border-white/[0.07] bg-white/[0.025] p-3.5 transition ${surface}`}
+                      className={`group relative flex items-center gap-3 overflow-hidden rounded-xl border border-white/[0.07] bg-white/2.5 p-3.5 transition ${surface}`}
                     >
                       <span
                         className={`grid size-9 shrink-0 place-items-center rounded-lg border transition-transform duration-200 group-hover:scale-105 ${tone}`}
@@ -575,8 +575,8 @@ export default function DashboardPage() {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.55 }}
         >
-          <MagicCard className="relative h-full overflow-hidden rounded-2xl border border-rose-400/20 bg-linear-to-br from-rose-500/[0.075] via-[#090e19] to-[#090e19] p-6 shadow-[18px_-18px_70px_rgba(251,113,133,0.055)]">
-            <div className="pointer-events-none absolute -right-16 -top-16 size-40 rounded-full bg-rose-400/[0.11] blur-3xl" />
+          <MagicCard className="relative h-full overflow-hidden rounded-2xl border border-rose-400/20 bg-linear-to-br from-rose-500/7.5 via-[#090e19] to-[#090e19] p-6 shadow-[18px_-18px_70px_rgba(251,113,133,0.055)]">
+            <div className="pointer-events-none absolute -right-16 -top-16 size-40 rounded-full bg-rose-400/11 blur-3xl" />
             <div className="flex items-start justify-between">
               <div>
                 <DashboardBadge
@@ -662,7 +662,7 @@ export default function DashboardPage() {
                     }
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.08 }}
-                    className="flex items-center justify-between rounded-xl border border-white/[0.06] bg-white/[0.025] px-4 py-3"
+                    className="flex items-center justify-between rounded-xl border border-white/6 bg-white/2.5 px-4 py-3"
                   >
                     <span className="text-xs text-slate-500">{label}</span>
                     <span className="text-sm font-semibold text-white">
@@ -683,7 +683,7 @@ export default function DashboardPage() {
         >
           <Card className="relative h-full overflow-hidden border-violet-400/15 bg-[#090e19]/95 p-6 shadow-[18px_-18px_70px_rgba(167,139,250,0.04)]">
             <div
-              className="pointer-events-none absolute -right-16 -top-16 size-44 rounded-full bg-violet-400/[0.075] blur-3xl"
+              className="pointer-events-none absolute -right-16 -top-16 size-44 rounded-full bg-violet-400/7.5 blur-3xl"
               aria-hidden="true"
             />
             <div className="flex items-start justify-between">
@@ -719,7 +719,7 @@ export default function DashboardPage() {
                         {display}
                       </motion.span>
                     </div>
-                    <div className="h-2 overflow-hidden rounded-full bg-white/[0.055]">
+                    <div className="h-2 overflow-hidden rounded-full bg-white/5.5">
                       <motion.div
                         className={`relative h-full rounded-full bg-linear-to-r ${color}`}
                         initial={{ width: reduceMotion ? `${value}%` : 0 }}
@@ -749,7 +749,7 @@ export default function DashboardPage() {
                 ),
               )}
             </div>
-            <div className="mt-8 grid grid-cols-3 divide-x divide-white/[0.07] rounded-xl border border-white/[0.06] bg-black/15 py-4 text-center">
+            <div className="mt-8 grid grid-cols-3 divide-x divide-white/[0.07] rounded-xl border border-white/6 bg-black/15 py-4 text-center">
               <div>
                 <p className="font-display text-lg font-semibold text-primary">
                   {estimatedBookings}
@@ -775,7 +775,7 @@ export default function DashboardPage() {
 
       <section className="mt-5 grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
         <Card className="relative overflow-hidden border-blue-400/15 bg-[#090e19]/95 p-5 shadow-[18px_-18px_70px_rgba(96,165,250,0.035)] sm:p-6">
-          <div className="pointer-events-none absolute -right-16 -top-16 size-40 rounded-full bg-blue-400/[0.065] blur-3xl" />
+          <div className="pointer-events-none absolute -right-16 -top-16 size-40 rounded-full bg-blue-400/6.5 blur-3xl" />
           <div className="flex items-center justify-between">
             <div>
               <DashboardBadge
@@ -799,7 +799,7 @@ export default function DashboardPage() {
               >
                 <Link
                   href={href}
-                  className="group block h-full rounded-xl border border-white/[0.07] bg-white/[0.025] p-4 transition hover:border-primary/20"
+                  className="group block h-full rounded-xl border border-white/[0.07] bg-white/2.5 p-4 transition hover:border-primary/20"
                 >
                   <span
                     className={`grid size-9 place-items-center rounded-lg border ${tone}`}
