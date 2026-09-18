@@ -1,6 +1,6 @@
 "use client";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { RainbowButton } from "@/components/ui/rainbow-button";
 import {
   useGetOperationsHealthQuery,
   useGetWebhookDeliveriesQuery,
@@ -9,6 +9,13 @@ import {
 import { FeedbackMessage } from "@/components/feedback-message";
 import { apiErrorMessage } from "@/lib/api-error";
 import { useState } from "react";
+import { Activity, RefreshCw, ServerCog, Webhook } from "lucide-react";
+import {
+  DashboardSkeleton,
+  ErrorState,
+  StatusBadge,
+  PageHeader,
+} from "@/components/dashboard-ui";
 
 export default function OperationsPage() {
   const health = useGetOperationsHealthQuery(undefined, {
@@ -36,25 +43,37 @@ export default function OperationsPage() {
       });
     }
   }
-  if (health.isLoading) return <p>Loading operations…</p>;
+  if (health.isLoading)
+    return <DashboardSkeleton label="Loading operations" cards={4} />;
   if (health.error)
     return (
-      <p className="text-red-300">
-        Operations data is available to workspace owners only.
-      </p>
+      <ErrorState
+        title="Operations unavailable"
+        description="Operations data is available to workspace owners only."
+      />
     );
   return (
     <>
-      <p className="text-sm text-cyan-400">Reliability and provider state</p>
-      <h1 className="mt-1 text-3xl font-bold">Operations</h1>
+      <PageHeader
+        eyebrow="Reliability center"
+        title="Operations"
+        description="Monitor queue pressure, provider health, and outbound webhook delivery state."
+        icon={Activity}
+      />
       <FeedbackMessage
         message={feedback?.message}
         tone={feedback?.error ? "error" : "success"}
       />
       <section className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {health.data?.data.queues.map((queue) => (
-          <Card key={queue.queue}>
-            <h2 className="font-semibold">{queue.queue}</h2>
+          <Card
+            key={queue.queue}
+            className="bg-linear-to-br from-primary/[0.045] to-[#090e19]"
+          >
+            <h2 className="flex items-center gap-2 font-semibold">
+              <ServerCog size={17} className="text-primary" />
+              {queue.queue}
+            </h2>
             <p className="mt-3 text-sm text-slate-400">
               Waiting {queue.waiting} · Active {queue.active} · Delayed{" "}
               {queue.delayed}
@@ -70,11 +89,22 @@ export default function OperationsPage() {
         ))}
       </section>
       <Card className="mt-6">
-        <h2 className="font-bold">Provider health</h2>
+        <h2 className="flex items-center gap-2 text-lg font-semibold">
+          <Activity size={18} className="text-sky-300" />
+          Provider health
+        </h2>
         <div className="mt-4 space-y-2">
           {health.data?.data.providers.map((provider) => (
-            <p key={provider.id} className="rounded-lg bg-white/5 p-3 text-sm">
-              {provider.provider} · {provider.status}
+            <p
+              key={provider.id}
+              className="dashboard-row rounded-xl border border-white/[0.07] bg-white/[0.035] p-4 text-sm"
+            >
+              {provider.provider} ·{" "}
+              <StatusBadge
+                tone={provider.status === "healthy" ? "success" : "warning"}
+              >
+                {provider.status}
+              </StatusBadge>
               {provider.latencyMs != null ? ` · ${provider.latencyMs}ms` : ""}
             </p>
           ))}
@@ -84,24 +114,28 @@ export default function OperationsPage() {
         </div>
       </Card>
       <Card className="mt-6">
-        <h2 className="font-bold">Outbound webhook deliveries</h2>
+        <h2 className="flex items-center gap-2 text-lg font-semibold">
+          <Webhook size={18} className="text-violet-300" />
+          Outbound webhook deliveries
+        </h2>
         <div className="mt-4 space-y-2">
           {deliveries.data?.data.map((delivery) => (
             <div
               key={delivery.id}
-              className="flex flex-wrap items-center justify-between gap-3 rounded-lg bg-white/5 p-3 text-sm"
+              className="dashboard-row flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/[0.07] bg-white/[0.035] p-4 text-sm"
             >
               <span>
                 {delivery.eventType} · {delivery.status} ·{" "}
                 {delivery.attemptCount} attempts
               </span>
               {delivery.status !== "delivered" && (
-                <Button
+                <RainbowButton
                   disabled={replayState.isLoading}
                   onClick={() => void replayDelivery(delivery.id)}
                 >
-                  Replay
-                </Button>
+                  <RefreshCw size={15} />
+                  {replayState.isLoading ? "Queueing…" : "Replay"}
+                </RainbowButton>
               )}
             </div>
           ))}

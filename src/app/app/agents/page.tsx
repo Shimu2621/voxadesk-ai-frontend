@@ -1,20 +1,46 @@
 "use client";
+
 import Link from "next/link";
-import type { FormEvent } from "react";
+import { useState, type FormEvent } from "react";
+import {
+  ArrowRight,
+  Bot,
+  ExternalLink,
+  Plus,
+  Rocket,
+  Sparkles,
+} from "lucide-react";
 import {
   useCreateAgentMutation,
   useGetAgentsQuery,
   usePublishAgentMutation,
+  useGetSessionQuery,
 } from "@/lib/voxadesk-api";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { RainbowButton } from "@/components/ui/rainbow-button";
 import { FeedbackMessage } from "@/components/feedback-message";
 import { apiErrorMessage } from "@/lib/api-error";
-import { useState } from "react";
+import {
+  AnimatedList,
+  AnimatedRow,
+  DashboardItem,
+  DashboardSkeleton,
+  EmptyState,
+  PageHeader,
+  SectionCard,
+  StatusBadge,
+} from "@/components/dashboard-ui";
+
+const field =
+  "mt-2 w-full rounded-xl border border-white/10 bg-[#080d17] px-3.5 py-3 text-sm";
+
 export default function Page() {
   const { data, isLoading, error } = useGetAgentsQuery();
-  const [publish, state] = usePublishAgentMutation();
+  const [publish, publishState] = usePublishAgentMutation();
   const [create, createState] = useCreateAgentMutation();
+  const session = useGetSessionQuery();
+  const canManage =
+    session.data?.data.role === "OWNER" ||
+    session.data?.data.role === "MANAGER";
   const [feedback, setFeedback] = useState<{
     message: string;
     error?: boolean;
@@ -23,11 +49,10 @@ export default function Page() {
     event.preventDefault();
     const form = event.currentTarget;
     const values = Object.fromEntries(new FormData(form));
-    const name = String(values.name);
     setFeedback(undefined);
     try {
       await create({
-        name,
+        name: String(values.name),
         greeting: String(values.greeting),
         voiceId: String(values.voiceId),
         timezone: String(values.timezone),
@@ -57,9 +82,9 @@ export default function Page() {
       }).unwrap();
       form.reset();
       setFeedback({ message: "Agent draft created." });
-    } catch (error) {
+    } catch (cause) {
       setFeedback({
-        message: apiErrorMessage(error, "Could not create the agent."),
+        message: apiErrorMessage(cause, "Could not create the agent."),
         error: true,
       });
     }
@@ -69,105 +94,189 @@ export default function Page() {
     try {
       await publish(id).unwrap();
       setFeedback({ message: "Agent published successfully." });
-    } catch (error) {
+    } catch (cause) {
       setFeedback({
-        message: apiErrorMessage(error, "Could not publish the agent."),
+        message: apiErrorMessage(cause, "Could not publish the agent."),
         error: true,
       });
     }
   }
+  const agents = data?.data ?? [];
   return (
     <>
-      <p className="text-sm text-cyan-400">VoxaDesk AI workspace</p>
-      <h1 className="mt-1 text-3xl font-bold">AI agents</h1>
-      <p className="mt-2 text-slate-400">
-        Draft changes remain private until publishing succeeds.
-      </p>
+      <PageHeader
+        eyebrow="AI workforce"
+        title="Agents"
+        description="Build, test, and publish receptionists that represent your business accurately."
+        icon={Bot}
+        actions={
+          <RainbowButton asChild variant="outline">
+            <Link href="/demo">
+              <ExternalLink size={16} />
+              Open test console
+            </Link>
+          </RainbowButton>
+        }
+      />
       <FeedbackMessage
         message={feedback?.message}
         tone={feedback?.error ? "error" : "success"}
       />
-      <div className="mt-8 grid gap-5 lg:grid-cols-[0.9fr_1.3fr]">
-        <Card>
-          <h2 className="font-bold">Create receptionist</h2>
-          <form className="mt-4 space-y-3" onSubmit={submit}>
-            <input
-              className="w-full rounded-lg border border-white/10 bg-slate-900 px-3 py-2"
-              name="name"
-              required
-              minLength={2}
-              placeholder="Agent name"
-            />
-            <textarea
-              className="w-full rounded-lg border border-white/10 bg-slate-900 px-3 py-2"
-              name="greeting"
-              required
-              minLength={5}
-              placeholder="Greeting"
-            />
-            <input
-              className="w-full rounded-lg border border-white/10 bg-slate-900 px-3 py-2"
-              name="voiceId"
-              required
-              placeholder="ElevenLabs voice ID"
-            />
-            <input
-              className="w-full rounded-lg border border-white/10 bg-slate-900 px-3 py-2"
-              name="timezone"
-              required
-              defaultValue="America/New_York"
-            />
-            <input
-              className="w-full rounded-lg border border-white/10 bg-slate-900 px-3 py-2"
-              name="transferNumber"
-              pattern="\+[1-9][0-9]{7,14}"
-              placeholder="Allowlisted transfer number (optional)"
-            />
-            <Button disabled={createState.isLoading}>Create draft</Button>
-          </form>
-        </Card>
-        <Card>
-          <h2 className="font-bold">Your agents</h2>
-          {isLoading && <p className="mt-4">Loading…</p>}
-          {error && (
-            <p className="mt-4 text-red-300">Agents could not be loaded.</p>
-          )}
-          <div className="mt-4 space-y-3">
-            {data?.data.map((agent) => (
-              <div
-                key={agent.id}
-                className="flex items-center justify-between rounded-xl bg-white/5 p-4"
-              >
-                <div>
-                  <p className="font-semibold">{agent.name}</p>
-                  <p className="text-xs text-slate-400">
-                    {agent.status}
-                    {agent.activeVersion
-                      ? ` · version ${agent.activeVersion.version}`
-                      : ""}
-                  </p>
+      <div
+        className={`mt-8 grid gap-5 ${canManage ? "xl:grid-cols-[0.8fr_1.2fr]" : "grid-cols-1"}`}
+      >
+        {canManage && (
+          <DashboardItem>
+            <SectionCard
+              title="Create receptionist"
+              description="Start with the essential identity and routing details. Fine-tune the full configuration after creation."
+              icon={Plus}
+              className="border-primary/15 bg-linear-to-br from-primary/5.5 to-[#090e19]"
+            >
+              <form className="grid gap-4" onSubmit={submit}>
+                <label className="text-sm">
+                  Agent name
+                  <input
+                    className={field}
+                    name="name"
+                    required
+                    minLength={2}
+                    placeholder="BrightPath Receptionist"
+                  />
+                </label>
+                <label className="text-sm">
+                  Greeting
+                  <textarea
+                    className={field}
+                    name="greeting"
+                    required
+                    minLength={5}
+                    rows={3}
+                    placeholder="Thanks for calling. How can I help?"
+                  />
+                </label>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <label className="text-sm">
+                    Voice ID
+                    <input
+                      className={field}
+                      name="voiceId"
+                      required
+                      placeholder="ElevenLabs voice ID"
+                    />
+                  </label>
+                  <label className="text-sm">
+                    Timezone
+                    <input
+                      className={field}
+                      name="timezone"
+                      required
+                      defaultValue="America/New_York"
+                    />
+                  </label>
                 </div>
-                {agent.status !== "ARCHIVED" && (
-                  <Button
-                    disabled={state.isLoading}
-                    onClick={() => void publishAgent(agent.id)}
-                  >
-                    {agent.activeVersion ? "Publish changes" : "Publish"}
-                  </Button>
-                )}
-              </div>
-            ))}
-            {data?.data.length === 0 && (
-              <p className="text-slate-400">No agents yet.</p>
-            )}
-          </div>
-          <Link
-            href="/demo"
-            className="mt-5 inline-block text-sm text-cyan-400 hover:underline"
+                <label className="text-sm">
+                  Transfer number{" "}
+                  <span className="text-slate-500">(optional)</span>
+                  <input
+                    className={field}
+                    name="transferNumber"
+                    pattern="\+[1-9][0-9]{7,14}"
+                    placeholder="+15550101000"
+                  />
+                </label>
+                <RainbowButton
+                  disabled={createState.isLoading}
+                  className="w-full sm:w-fit"
+                >
+                  <Sparkles size={16} />
+                  {createState.isLoading
+                    ? "Creating draft…"
+                    : "Create agent draft"}
+                </RainbowButton>
+              </form>
+            </SectionCard>
+          </DashboardItem>
+        )}
+        <DashboardItem>
+          <SectionCard
+            title="Your agents"
+            description={`${agents.length} agent${agents.length === 1 ? "" : "s"} in this workspace.`}
+            icon={Bot}
           >
-            Open private test console
-          </Link>
-        </Card>
+            {isLoading && (
+              <DashboardSkeleton label="Loading agents" cards={3} />
+            )}
+            {error && (
+              <p role="alert" className="text-sm text-red-300">
+                Agents could not be loaded.
+              </p>
+            )}
+            <AnimatedList className="space-y-3">
+              {agents.map((agent) => (
+                <AnimatedRow
+                  key={agent.id}
+                  className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Link
+                        className="font-semibold text-white hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                        href={`/app/agents/${agent.id}`}
+                      >
+                        {agent.name}
+                      </Link>
+                      <StatusBadge
+                        tone={
+                          agent.status === "PUBLISHED"
+                            ? "success"
+                            : agent.status === "ARCHIVED"
+                              ? "neutral"
+                              : "warning"
+                        }
+                      >
+                        {agent.status}
+                      </StatusBadge>
+                    </div>
+                    <p className="mt-1 text-sm text-slate-500">
+                      {agent.activeVersion
+                        ? `Active version ${agent.activeVersion.version}`
+                        : "Not published yet"}
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <RainbowButton asChild variant="secondary">
+                      <Link href={`/app/agents/${agent.id}`}>
+                        Configure
+                        <ArrowRight size={16} />
+                      </Link>
+                    </RainbowButton>
+                    {canManage && agent.status !== "ARCHIVED" && (
+                      <RainbowButton
+                        disabled={publishState.isLoading}
+                        onClick={() => void publishAgent(agent.id)}
+                      >
+                        <Rocket size={16} />
+                        {publishState.isLoading
+                          ? "Publishing…"
+                          : agent.activeVersion
+                            ? "Publish changes"
+                            : "Publish"}
+                      </RainbowButton>
+                    )}
+                  </div>
+                </AnimatedRow>
+              ))}
+              {agents.length === 0 && !isLoading && (
+                <EmptyState
+                  title="No agents yet"
+                  description="Create your first AI receptionist to begin configuring calls and conversations."
+                  icon={Bot}
+                />
+              )}
+            </AnimatedList>
+          </SectionCard>
+        </DashboardItem>
       </div>
     </>
   );
