@@ -28,6 +28,8 @@ import { EmptyState, PageHeader, StatusBadge } from "@/components/dashboard-ui";
 
 const field =
   "mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-3 py-2";
+const rowAction =
+  "min-h-9 rounded-lg px-3 py-2 text-xs shadow-none [&::before]:hidden";
 
 export default function CatalogPage() {
   const services = useGetServicesQuery();
@@ -254,8 +256,8 @@ export default function CatalogPage() {
                 className="dashboard-row rounded-xl border border-white/[0.07] bg-white/[0.035] p-4"
                 key={service.id}
               >
-                <div className="flex flex-wrap justify-between gap-2">
-                  <div>
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="min-w-0">
                     <h3 className="font-semibold">{service.name}</h3>
                     <p className="text-sm text-slate-400">
                       {service.durationMinutes} min ·{" "}
@@ -271,15 +273,17 @@ export default function CatalogPage() {
                     </div>
                   </div>
                   {canManage && service.active && (
-                    <div className="flex gap-2">
+                    <div className="flex shrink-0 items-center gap-2 border-t border-white/6 pt-3 sm:border-l sm:border-t-0 sm:pl-4 sm:pt-0">
                       <RainbowButton
-                        variant="ghost"
+                        className={rowAction}
+                        variant="outline"
                         onClick={() => setEditingService(service)}
                       >
                         <Pencil size={15} />
                         Edit
                       </RainbowButton>
                       <RainbowButton
+                        className={rowAction}
                         variant="destructive"
                         onClick={() => void deactivate("service", service.id)}
                       >
@@ -368,29 +372,39 @@ export default function CatalogPage() {
                 className="dashboard-row rounded-xl border border-white/[0.07] bg-white/[0.035] p-4"
                 key={faq.id}
               >
-                <h3 className="font-semibold">{faq.question}</h3>
-                <p className="mt-1 text-sm text-slate-300">{faq.answer}</p>
-                <p className="mt-1 text-xs text-slate-500">
-                  {faq.active ? "Active" : "Inactive"}
-                </p>
-                {canManage && faq.active && (
-                  <div className="mt-2 flex gap-2">
-                    <RainbowButton
-                      variant="secondary"
-                      onClick={() => setEditingFaq(faq)}
-                    >
-                      <Pencil size={15} />
-                      Edit
-                    </RainbowButton>
-                    <RainbowButton
-                      variant="destructive"
-                      onClick={() => void deactivate("faq", faq.id)}
-                    >
-                      <Trash2 size={15} />
-                      Deactivate
-                    </RainbowButton>
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="min-w-0">
+                    <h3 className="font-semibold">{faq.question}</h3>
+                    <p className="mt-1 text-sm leading-6 text-slate-300">
+                      {faq.answer}
+                    </p>
+                    <div className="mt-2">
+                      <StatusBadge tone={faq.active ? "success" : "neutral"}>
+                        {faq.active ? "Active" : "Inactive"}
+                      </StatusBadge>
+                    </div>
                   </div>
-                )}
+                  {canManage && faq.active && (
+                    <div className="flex shrink-0 items-center gap-2 border-t border-white/6 pt-3 sm:border-l sm:border-t-0 sm:pl-4 sm:pt-0">
+                      <RainbowButton
+                        className={rowAction}
+                        variant="outline"
+                        onClick={() => setEditingFaq(faq)}
+                      >
+                        <Pencil size={14} />
+                        Edit
+                      </RainbowButton>
+                      <RainbowButton
+                        className={rowAction}
+                        variant="destructive"
+                        onClick={() => void deactivate("faq", faq.id)}
+                      >
+                        <Trash2 size={14} />
+                        Deactivate
+                      </RainbowButton>
+                    </div>
+                  )}
+                </div>
               </article>
             ))}
             {faqs.data?.data.length === 0 && (

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
 import {
+  ArrowRight,
   CalendarCheck2,
   Eye,
   EyeOff,
@@ -15,7 +16,8 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
-import { Button } from "@/components/ui/button";
+import { SectionBadge } from "@/components/landing/section-badge";
+import { RainbowButton } from "@/components/ui/rainbow-button";
 import { BrandLogo } from "@/components/brand-logo";
 
 type AuthResponse = {
@@ -46,17 +48,21 @@ const features = [
     tone: "border-amber-400/25 bg-amber-400/10 text-amber-300",
   },
 ];
+const apiUrl =
+  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1";
 
 export function AuthForm({
   mode,
   footer,
+  initialError,
 }: {
   mode: "login" | "signup";
   footer: ReactNode;
+  initialError?: string;
 }) {
   const signup = mode === "signup";
   const router = useRouter();
-  const [error, setError] = useState<string>();
+  const [error, setError] = useState<string | undefined>(initialError);
   const [submitting, setSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const reduceMotion = useReducedMotion();
@@ -72,16 +78,13 @@ export function AuthForm({
     const controller = new AbortController();
     const timeoutId = window.setTimeout(() => controller.abort(), 12_000);
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1"}/auth/${mode}`,
-        {
-          method: "POST",
-          credentials: "include",
-          signal: controller.signal,
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify(values),
-        },
-      );
+      const response = await fetch(`${apiUrl}/auth/${mode}`, {
+        method: "POST",
+        credentials: "include",
+        signal: controller.signal,
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(values),
+      });
       const payload = (await response.json()) as AuthResponse;
       if (!response.ok)
         throw new Error(payload.message ?? "Authentication failed.");
@@ -128,15 +131,9 @@ export function AuthForm({
             {...entrance}
             transition={{ duration: 0.65, ease: "easeOut" }}
           >
-            <span className="relative inline-flex min-h-9 min-w-67.5 items-center justify-center pt-1 rounded-full border border-primary/25 bg-primary/10 px-10 text-center text-xs font-semibold uppercase leading-none tracking-[0.12em] text-primary">
-              <Sparkles
-                className="absolute left-4 top-1/2 -translate-y-1/2"
-                size={14}
-              />
-              <span className="whitespace-nowrap">
-                Built for modern service teams
-              </span>
-            </span>
+            <SectionBadge icon={Sparkles} tone="cyan">
+              Built for modern service teams
+            </SectionBadge>
             <h1 className="mt-7 max-w-xl text-4xl font-semibold leading-[1.16] tracking-[-0.035em] xl:text-5xl">
               Every call answered. Every opportunity captured.
             </h1>
@@ -224,9 +221,9 @@ export function AuthForm({
             }}
           >
             <div className="mb-10 flex justify-center lg:hidden">
-              <span className="rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-primary">
+              <SectionBadge icon={Sparkles} tone="cyan">
                 Your AI receptionist
-              </span>
+              </SectionBadge>
             </div>
             <div className="mb-9 text-center lg:text-left">
               <h1 className="text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
@@ -240,34 +237,26 @@ export function AuthForm({
             </div>
             {!signup && (
               <>
-                <div className="grid grid-cols-2 gap-3">
-                  <Button
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <RainbowButton
                     className="social-button"
-                    variant="outline"
-                    type="button"
-                    disabled
-                    title="Google sign-in coming soon"
+                    variant="secondary"
+                    asChild
                   >
-                    <span className="google-g text-base font-black">G</span>{" "}
-                    Google
-                  </Button>
-                  {!signup && (
-                    <Link
-                      className="block text-sm text-cyan-400 hover:underline"
-                      href="/forgot-password"
-                    >
-                      Forgot your password?
-                    </Link>
-                  )}
-                  <Button
+                    <a href={`${apiUrl}/auth/oauth/google`}>
+                      <span className="google-g text-base font-black">G</span>
+                      Continue with Google
+                    </a>
+                  </RainbowButton>
+                  <RainbowButton
                     className="social-button"
-                    variant="outline"
-                    type="button"
-                    disabled
-                    title="GitHub sign-in coming soon"
+                    variant="secondary"
+                    asChild
                   >
-                    <Github size={18} /> GitHub
-                  </Button>
+                    <a href={`${apiUrl}/auth/oauth/github`}>
+                      <Github size={18} /> Continue with GitHub
+                    </a>
+                  </RainbowButton>
                 </div>
                 <div className="my-7 flex items-center gap-4 text-xs font-normal text-[#858aa7]">
                   <span className="h-px flex-1 bg-white/8" />
@@ -356,9 +345,12 @@ export function AuthForm({
                     />
                     Remember me
                   </label>
-                  <span className="font-semibold text-primary">
+                  <Link
+                    className="font-semibold text-primary transition hover:text-cyan-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                    href="/forgot-password"
+                  >
                     Forgot password?
-                  </span>
+                  </Link>
                 </div>
               )}
               {error && (
@@ -373,7 +365,7 @@ export function AuthForm({
                 whileHover={submitting || reduceMotion ? {} : { scale: 1.01 }}
                 whileTap={submitting || reduceMotion ? {} : { scale: 0.985 }}
               >
-                <Button
+                <RainbowButton
                   className="auth-submit"
                   type="submit"
                   disabled={submitting}
@@ -383,7 +375,8 @@ export function AuthForm({
                     : signup
                       ? "Create account"
                       : "Log in"}
-                </Button>
+                  {!submitting && <ArrowRight size={17} />}
+                </RainbowButton>
               </motion.div>
             </form>
             <p className="mt-7 text-center text-sm font-normal text-[#989db8]">

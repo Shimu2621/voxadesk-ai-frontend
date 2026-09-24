@@ -101,19 +101,23 @@ export default function Page() {
           </AnimatedList>
           <nav
             aria-label="Conversation pagination"
-            className="mt-6 flex items-center justify-between border-t border-white/[0.08] pt-5"
+            className="mt-6 grid grid-cols-[1fr_auto_1fr] items-center gap-3 border-t border-white/[0.08] pt-5"
           >
             <RainbowButton
-              variant="secondary"
+              className="min-h-9 w-fit rounded-lg px-3.5 py-2 text-xs shadow-none [&::before]:hidden"
+              variant="outline"
               disabled={page === 0 || isFetching}
               onClick={() => setCursors((current) => current.slice(0, -1))}
             >
               <ArrowLeft size={16} />
               Previous
             </RainbowButton>
-            <span className="text-sm text-slate-500">Page {page + 1}</span>
+            <span className="rounded-full border border-white/[0.08] bg-white/[0.035] px-3 py-1.5 text-center text-xs font-medium text-slate-400">
+              Page {page + 1}
+            </span>
             <RainbowButton
-              variant="secondary"
+              className="min-h-9 w-fit justify-self-end rounded-lg px-3.5 py-2 text-xs shadow-none [&::before]:hidden"
+              variant="outline"
               disabled={!data?.nextCursor || isFetching}
               onClick={() =>
                 data?.nextCursor &&

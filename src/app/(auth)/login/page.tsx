@@ -1,10 +1,16 @@
 import Link from "next/link";
 import { AuthForm } from "@/components/auth-form";
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ oauth_error?: string }>;
+}) {
+  const { oauth_error: oauthError } = await searchParams;
   return (
     <AuthForm
       mode="login"
+      initialError={oauthError}
       footer={
         <span>
           New to VoxaDesk AI?{" "}

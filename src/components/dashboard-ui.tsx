@@ -39,7 +39,7 @@ export function DashboardPage({
       animate={reduceMotion ? undefined : "visible"}
     >
       <div
-        className="pointer-events-none absolute -right-20 -top-16 size-72 rounded-full bg-primary/[0.045] blur-[110px]"
+        className="pointer-events-none absolute -right-20 -top-16 size-72 rounded-full bg-primary/4.5 blur-[110px]"
         aria-hidden="true"
       />
       {children}
@@ -121,7 +121,7 @@ export function SectionCard({
   return (
     <section
       className={cn(
-        "dashboard-card relative overflow-hidden rounded-2xl border border-white/[0.09] bg-[#090e19]/95 p-5 shadow-[0_18px_55px_rgba(0,0,0,0.18)] sm:p-6",
+        "dashboard-card relative overflow-hidden rounded-2xl border border-white/9 bg-[#090e19]/95 p-5 shadow-[0_18px_55px_rgba(0,0,0,0.18)] sm:p-6",
         className,
       )}
     >
@@ -231,7 +231,7 @@ export function EmptyState({
   action?: ReactNode;
 }) {
   return (
-    <div className="grid min-h-48 place-items-center rounded-2xl border border-dashed border-white/10 bg-white/[0.02] p-6 text-center">
+    <div className="grid min-h-48 place-items-center rounded-2xl border border-dashed border-white/10 bg-white/2 p-6 text-center">
       <div>
         <span className="mx-auto grid size-12 place-items-center rounded-2xl border border-primary/20 bg-primary/10 text-primary">
           <Icon size={20} />
@@ -256,12 +256,12 @@ export function DashboardSkeleton({
   return (
     <div className="space-y-6" role="status" aria-label={label}>
       <span className="sr-only">{label}</span>
-      <div className="h-24 animate-pulse rounded-2xl bg-white/[0.045] motion-reduce:animate-none" />
+      <div className="h-24 animate-pulse rounded-2xl bg-white/4.5 motion-reduce:animate-none" />
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {Array.from({ length: cards }, (_, index) => (
           <div
             key={index}
-            className="h-44 animate-pulse rounded-2xl bg-white/[0.045] motion-reduce:animate-none"
+            className="h-44 animate-pulse rounded-2xl bg-white/4.5 motion-reduce:animate-none"
           />
         ))}
       </div>
@@ -279,7 +279,7 @@ export function ErrorState({
   return (
     <div
       role="alert"
-      className="mx-auto mt-16 max-w-lg rounded-2xl border border-red-400/20 bg-red-400/[0.06] p-7 text-center"
+      className="mx-auto mt-16 max-w-lg rounded-2xl border border-red-400/20 bg-red-400/6 p-7 text-center"
     >
       <span className="mx-auto grid size-12 place-items-center rounded-2xl bg-red-400/10 text-red-300">
         <AlertCircle size={20} />

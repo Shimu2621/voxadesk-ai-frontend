@@ -72,7 +72,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     }
   }
   return (
-    <div className="min-h-screen bg-[#050812] text-white md:grid md:grid-cols-[250px_1fr]">
+    <div className="min-h-screen overflow-x-hidden bg-[#050812] text-white md:grid md:grid-cols-[250px_1fr]">
       <aside className="border-b border-white/[0.08] bg-[#070b14]/95 p-4 backdrop-blur-xl md:sticky md:top-0 md:h-screen md:border-b-0 md:border-r md:p-5">
         <BrandLogo compact />
         <p className="mt-2 hidden text-xs text-slate-500 md:block">

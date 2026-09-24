@@ -32,6 +32,8 @@ import {
 
 const field =
   "mt-2 w-full rounded-xl border border-white/10 bg-[#080d17] px-3.5 py-3 text-sm";
+const rowAction =
+  "min-h-9 rounded-lg px-3.5 py-2 text-xs shadow-none [&::before]:hidden";
 
 export default function Page() {
   const { data, isLoading, error } = useGetAgentsQuery();
@@ -110,7 +112,11 @@ export default function Page() {
         description="Build, test, and publish receptionists that represent your business accurately."
         icon={Bot}
         actions={
-          <RainbowButton asChild variant="outline">
+          <RainbowButton
+            asChild
+            variant="outline"
+            className="min-h-10 rounded-lg px-4 py-2.5 shadow-none [&::before]:hidden"
+          >
             <Link href="/demo">
               <ExternalLink size={16} />
               Open test console
@@ -244,8 +250,12 @@ export default function Page() {
                         : "Not published yet"}
                     </p>
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    <RainbowButton asChild variant="secondary">
+                  <div className="flex shrink-0 flex-wrap items-center gap-2 border-t border-white/6 pt-3 sm:border-l sm:border-t-0 sm:pl-4 sm:pt-0">
+                    <RainbowButton
+                      asChild
+                      variant="outline"
+                      className={rowAction}
+                    >
                       <Link href={`/app/agents/${agent.id}`}>
                         Configure
                         <ArrowRight size={16} />
@@ -253,6 +263,7 @@ export default function Page() {
                     </RainbowButton>
                     {canManage && agent.status !== "ARCHIVED" && (
                       <RainbowButton
+                        className={rowAction}
                         disabled={publishState.isLoading}
                         onClick={() => void publishAgent(agent.id)}
                       >

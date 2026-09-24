@@ -4,6 +4,7 @@ import {
   Building2,
   Check,
   CreditCard,
+  ExternalLink,
   PlugZap,
   Save,
   Settings,
@@ -103,7 +104,7 @@ export default function Page() {
         tone={feedback?.error ? "error" : "success"}
       />
       <div className="mt-8 grid gap-5 xl:grid-cols-2">
-        <Card className="border-primary/15 bg-linear-to-br from-primary/[0.045] to-[#090e19]">
+        <Card className="border-primary/15 bg-linear-to-br from-primary/4.5 to-[#090e19]">
           <h2 className="flex items-center gap-2 text-lg font-semibold">
             <Building2 size={18} className="text-primary" />
             Organization profile
@@ -210,7 +211,7 @@ export default function Page() {
             Stripe Checkout and the customer portal require a configured
             provider. Mock mode opens simulated URLs only.
           </p>
-          <div className="mt-4 flex gap-2">
+          <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-white/[0.07] pt-5">
             {isOwner &&
               ["growth", "agency"].map((plan) => (
                 <RainbowButton key={plan} onClick={() => void choosePlan(plan)}>
@@ -220,11 +221,14 @@ export default function Page() {
               ))}
             {isOwner && billing.data?.data.subscription && (
               <RainbowButton
-                variant="secondary"
+                className="min-h-10 rounded-lg px-4 py-2.5 shadow-none sm:ml-auto [&::before]:hidden"
+                variant="outline"
                 disabled={portalState.isLoading}
+                aria-busy={portalState.isLoading}
                 onClick={() => void openPortal()}
               >
-                Manage billing
+                <ExternalLink size={15} />
+                {portalState.isLoading ? "Opening portal…" : "Manage billing"}
               </RainbowButton>
             )}
           </div>
